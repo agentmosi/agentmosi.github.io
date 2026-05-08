@@ -284,6 +284,90 @@
     </div>
   </div>
 
+  <!-- 全局关联分析 -->
+  <div class="section">
+    <div class="section-title">🔗 全局 Agent 行为关联分析</div>
+    <div class="flow-svg-wrapper">
+      <svg class="flow-svg" viewBox="0 0 780 380" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="fs2" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/></filter>
+          <marker id="agc" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6366f1"/></marker>
+          <marker id="ar2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#ef4444"/></marker>
+          <linearGradient id="gs2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#dbeafe"/></linearGradient>
+          <linearGradient id="gp2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f3ff"/><stop offset="1" stop-color="#ede9fe"/></linearGradient>
+          <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecfdf5"/><stop offset="1" stop-color="#d1fae5"/></linearGradient>
+        </defs>
+        <rect x="0" y="0" width="780" height="380" rx="14" fill="transparent"/>
+
+        <!-- Session A -->
+        <rect x="20" y="20" width="150" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#fs2)"/>
+        <text x="95" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">🅰️ Agent Session A</text>
+        <text x="95" y="56" text-anchor="middle" font-size="9" fill="#94a3b8">用户对话 + 工具调用</text>
+
+        <!-- Session B -->
+        <rect x="20" y="90" width="150" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#fs2)"/>
+        <text x="95" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">🅱️ Agent Session B</text>
+        <text x="95" y="126" text-anchor="middle" font-size="9" fill="#94a3b8">文件操作 + 网络请求</text>
+
+        <!-- Session C -->
+        <rect x="20" y="160" width="150" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#fs2)"/>
+        <text x="95" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">🅲 Agent Session C</text>
+        <text x="95" y="196" text-anchor="middle" font-size="9" fill="#94a3b8">数据库查询 + 代码执行</text>
+
+        <!-- Event Collector -->
+        <rect x="230" y="55" width="160" height="110" rx="12" fill="url(#gs2)" stroke="#bfdbfe" stroke-width="2" filter="url(#fs2)"/>
+        <text x="310" y="80" text-anchor="middle" font-size="13" font-weight="800" fill="#1d4ed8">📡 事件总线</text>
+        <text x="310" y="98" text-anchor="middle" font-size="10" fill="#3b82f6">实时采集 · 统一格式</text>
+        <text x="310" y="116" text-anchor="middle" font-size="10" fill="#3b82f6">时间戳对齐 · 会话关联</text>
+        <text x="310" y="134" text-anchor="middle" font-size="10" fill="#3b82f6">parent_id 拓扑记录</text>
+        <text x="310" y="152" text-anchor="middle" font-size="10" fill="#3b82f6">run_id / session_id 索引</text>
+
+        <!-- Arrows Sessions → Bus -->
+        <line x1="170" y1="42" x2="228" y2="70" stroke="#6366f1" stroke-width="1.2" marker-end="url(#agc)"/>
+        <line x1="170" y1="112" x2="228" y2="100" stroke="#6366f1" stroke-width="1.2" marker-end="url(#agc)"/>
+        <line x1="170" y1="182" x2="228" y2="130" stroke="#6366f1" stroke-width="1.2" marker-end="url(#agc)"/>
+
+        <!-- Correlation Engine -->
+        <rect x="450" y="55" width="180" height="110" rx="12" fill="url(#gp2)" stroke="#c4b5fd" stroke-width="2" filter="url(#fs2)"/>
+        <text x="540" y="80" text-anchor="middle" font-size="13" font-weight="800" fill="#7c3aed">🧩 关联分析引擎</text>
+        <text x="540" y="100" text-anchor="middle" font-size="10" fill="#8b5cf6">跨会话事件关联</text>
+        <text x="540" y="118" text-anchor="middle" font-size="10" fill="#8b5cf6">证据链自动构建</text>
+        <text x="540" y="136" text-anchor="middle" font-size="10" fill="#8b5cf6">攻击链路追溯 (trace)</text>
+        <text x="540" y="154" text-anchor="middle" font-size="10" fill="#8b5cf6">风险评分聚合</text>
+
+        <!-- Arrow Bus → Correlation -->
+        <line x1="390" y1="110" x2="448" y2="110" stroke="#8b5cf6" stroke-width="1.8" marker-end="url(#agc)"/>
+
+        <!-- Evidence Chain -->
+        <rect x="690" y="35" width="140" height="44" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#fs2)"/>
+        <text x="760" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">📋 证据链 A</text>
+        <text x="760" y="71" text-anchor="middle" font-size="9" fill="#94a3b8">Session A · prompt→cmd</text>
+
+        <rect x="690" y="95" width="140" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#fs2)"/>
+        <text x="760" y="115" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">📋 证据链 B</text>
+        <text x="760" y="131" text-anchor="middle" font-size="9" fill="#94a3b8">Session B · file→network</text>
+
+        <rect x="690" y="155" width="140" height="44" rx="10" fill="#fff" stroke="#fca5a5" stroke-width="1.5" filter="url(#fs2)"/>
+        <text x="760" y="175" text-anchor="middle" font-size="12" font-weight="700" fill="#dc2626">🚨 跨会话攻击链</text>
+        <text x="760" y="191" text-anchor="middle" font-size="9" fill="#ef4444">A→C 联合利用</text>
+
+        <!-- Arrows Correlation → Evidence -->
+        <path d="M 615 70 L 655 70 L 655 57 L 688 57" stroke="#6366f1" stroke-width="1.2" fill="none" marker-end="url(#agc)"/>
+        <path d="M 615 100 L 655 100 L 655 117 L 688 117" stroke="#6366f1" stroke-width="1.2" fill="none" marker-end="url(#agc)"/>
+        <path d="M 615 130 L 655 130 L 655 177 L 688 177" stroke="#ef4444" stroke-width="1.4" stroke-dasharray="5,3" fill="none" marker-end="url(#ar2)"/>
+
+        <!-- Annotated cross-session red line -->
+        <path d="M 230 230 L 440 250 L 520 270 L 690 270 L 730 198" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="8,4" fill="none" opacity="0.5"/>
+        <text x="445" y="258" font-size="9" fill="#ef4444" font-weight="700">跨会话关联威胁</text>
+
+        <!-- Bottom Annotations -->
+        <rect x="20" y="300" width="720" height="65" rx="10" fill="url(#gg)" stroke="#a7f3d0" stroke-width="1.2" filter="url(#fs2)"/>
+        <text x="380" y="322" text-anchor="middle" font-size="13" font-weight="800" fill="#059669">🔍 关联分析能力概览</text>
+        <text x="380" y="344" text-anchor="middle" font-size="11" fill="#475569">多 Agent 会话事件统一采集 → 时序对齐与拓扑关联 → 证据链自动构建 → 跨会话攻击链路追溯 → 全局风险评分</text>
+      </svg>
+    </div>
+  </div>
+
   <!-- 核心能力 -->
   <div class="section">
     <div class="section-title">⚡ 核心能力</div>
