@@ -440,50 +440,6 @@
     </div>
   </div>
 
-  <!-- Hook 生命周期 -->
-  <div class="section">
-    <div class="section-title">🪝 Hook 挂载点</div>
-    <div class="card">
-      <p style="color:var(--text-secondary);font-size:13.5px;margin-bottom:18px;line-height:1.8;">
-        AgentMoss 在 Agent 对话生命周期的 6 个关键节点注入安全检查，与 OpenClaw/KiloCode 的原生 Security Hook 体系无缝对接：
-      </p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>message_received</strong> — 用户消息到达，第一时间检测 Prompt 注入</span></div>
-        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>before_prompt_build</strong> — 提示词构建前，检测系统消息污染与越狱</span></div>
-        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>llm_output</strong> — 模型输出后，检测输出中的密钥与敏感指令</span></div>
-        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>tool_call_check</strong> — 工具调用前，审查命令 / 路径 / 网络参数</span></div>
-        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>message_sending</strong> — 消息发出前，阻断包含敏感数据的回复</span></div>
-        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>session_end</strong> — 会话结束时，汇总运行风险评分并生成审计日志</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- API 端点 -->
-  <div class="section">
-    <div class="section-title">🔌 API 端点一览</div>
-    <div class="card">
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/health</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/stats</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/events</span></div>
-      <div class="endpoint"><span class="method method-post">POST</span><span class="path">/api/events</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/events/:id</span></div>
-      <div class="endpoint"><span class="method method-post">POST</span><span class="path">/api/tool-call/check</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/runs</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/runs/:id</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/runs/:id/events</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/runs/:id/graph</span></div>
-      <div class="endpoint"><span class="method method-post">POST</span><span class="path">/api/runs/:id/evidence-chain</span></div>
-      <div class="endpoint"><span class="method method-put">PUT</span><span class="path">/api/runs/:id/status</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/policy</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/rules</span></div>
-      <div class="endpoint"><span class="method method-put">PUT</span><span class="path">/api/rules</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/stream</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/high-risk</span></div>
-      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/evidence-chains/:id</span></div>
-      <div class="endpoint"><span class="method method-post">POST</span><span class="path">/api/demo/seed</span></div>
-    </div>
-  </div>
-
 </div>
 
 </body>
