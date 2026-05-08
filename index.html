@@ -158,6 +158,16 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
+  .paper-footer {
+    margin: 28px 0 0; padding: 20px 24px;
+    background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-lg);
+    font-size: 14px; color: var(--text-secondary); line-height: 1.8;
+    text-align: center; display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 8px 12px;
+  }
+  .paper-footer a { color: var(--accent); font-weight: 700; text-decoration: none; }
+  .paper-footer a:hover { text-decoration: underline; }
+
   @media (max-width: 768px) {
     .features { grid-template-columns: 1fr; }
     .spec-list { grid-template-columns: 1fr; }
@@ -463,3 +473,9 @@
   </div>
 
   <!-- 规则库 -->
+
+  <footer class="paper-footer" aria-label="计划发表的论文">
+    <strong>计划发表的论文：</strong>
+    <a href="https://www.preprints.org/manuscript/202604.1029" target="_blank" rel="noopener">AgentMoss Preprint</a>
+    <span>我们计划发表的论文系统化介绍了 AgentMoss 的设计动机、运行时监控架构与 Agent 安全评估方法。</span>
+  </footer>
