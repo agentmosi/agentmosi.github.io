@@ -186,7 +186,7 @@
 
   <!-- Hero -->
   <div class="hero">
-    <h1>🌿 <span class="gradient">AgentMoss</span>: Agent行为全链路细粒度监控与安全分析</h1>
+    <h1>🌿 <span class="gradient">AgentMoss</span><br>Agent行为全链路细粒度监控与安全分析</h1>
     <p>一套轻量级、可嵌入的 Agent 运行时安全检测系统，覆盖 Prompt 注入检测、工具调用审查、敏感路径扫描与密钥匹配——为 AI Agent 提供全链路行为可见性与实时安全阻断能力。</p>
   </div>
 
@@ -463,28 +463,3 @@
   </div>
 
   <!-- 规则库 -->
-  <div class="section">
-    <div class="section-title">📋 安全规则库</div>
-    <div class="card">
-      <table class="rules-table">
-        <thead>
-          <tr><th>规则 ID</th><th>类型</th><th>动作</th><th>说明</th><th>风险分数</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>secret-in-prompt</td><td>密钥匹配</td><td><span class="badge badge-block">block</span></td><td>19 类密钥 regex</td><td>85</td></tr>
-          <tr><td>sensitive-path-read</td><td>路径扫描</td><td><span class="badge badge-block">block</span></td><td>/etc/passwd, ~/.ssh 等</td><td>90</td></tr>
-          <tr><td>sensitive-path-write</td><td>路径扫描</td><td><span class="badge badge-block">block</span></td><td>/etc, ~/.ssh, .env 等</td><td>95</td></tr>
-          <tr><td>raw-ip-access</td><td>网络检测</td><td><span class="badge badge-warn">require_approval</span></td><td>raw IP URL</td><td>50</td></tr>
-          <tr><td>internal-host</td><td>网络检测</td><td><span class="badge badge-warn">require_approval</span></td><td>localhost / 127.* / 10.* / 192.168.*</td><td>60</td></tr>
-          <tr><td>prompt-injection</td><td>注入检测</td><td><span class="badge badge-block">block</span></td><td>ignore previous / system prompt leaking 等</td><td>80</td></tr>
-          <tr><td>deny-list-url</td><td>网络检测</td><td><span class="badge badge-block">block</span></td><td>自定义黑名单 URL</td><td>85</td></tr>
-          <tr><td>tool-call-volume</td><td>通用</td><td><span class="badge badge-warn">require_approval</span></td><td>工具调用频率 ≥ 10/min</td><td>40</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
-
-</body>
-</html>
