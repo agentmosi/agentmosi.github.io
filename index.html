@@ -173,56 +173,6 @@
     <p>一套轻量级、可嵌入的 Agent 运行时安全检测系统，覆盖 Prompt 注入检测、工具调用审查、敏感路径扫描与密钥匹配——为 AI Agent 提供全链路行为可见性与实时安全阻断能力。</p>
   </div>
 
-  <!-- 核心能力 -->
-  <div class="section">
-    <div class="section-title">✨ 核心能力</div>
-    <div class="features">
-      <div class="feature">
-        <div class="feat-icon">🛡️</div>
-        <div class="feat-title">实时监控面板</div>
-        <div class="feat-desc">Agent 运行状态、事件流、安全告警实时呈现，支持事件详情展开与证据链可视化。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">🔍</div>
-        <div class="feat-title">Prompt 注入检测</div>
-        <div class="feat-desc">内置多维度注入检测引擎，覆盖越狱、系统提示泄露、忽略指令等攻击手法。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">🔑</div>
-        <div class="feat-title">密钥匹配</div>
-        <div class="feat-desc">覆盖 19 类密钥 regex，实时扫描 Agent 输入/输出中的 API Key、Token、密码等敏感信息。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">📂</div>
-        <div class="feat-title">敏感路径扫描</div>
-        <div class="feat-desc">对文件读写操作进行路径安全审查，拦截 /etc/passwd、~/.ssh、.env 等敏感文件的访问。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">🌐</div>
-        <div class="feat-title">网络策略审计</div>
-        <div class="feat-desc">对网络请求进行安全审计，检测 raw IP 访问、内网地址、黑名单 URL 等风险行为。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">📊</div>
-        <div class="feat-title">全链路 Trace</div>
-        <div class="feat-desc">基于 parent_id / run_id / session_id 构建完整调用拓扑，实现 Agent 行为全链路可观测。</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 技术规格 -->
-  <div class="section">
-    <div class="section-title">📐 技术规格</div>
-    <div class="spec-list">
-      <div class="spec-item"><span class="spec-icon">⚡</span><div><strong>超低延迟</strong><span style="color:var(--text-muted);font-size:12px;">p50 < 2ms</span></div></div>
-      <div class="spec-item"><span class="spec-icon">📦</span><div><strong>轻量嵌入</strong><span style="color:var(--text-muted);font-size:12px;">纯 TypeScript，零外部运行时依赖</span></div></div>
-      <div class="spec-item"><span class="spec-icon">🔌</span><div><strong>Hook 体系</strong><span style="color:var(--text-muted);font-size:12px;">6 个生命周期钩子无缝接入</span></div></div>
-      <div class="spec-item"><span class="spec-icon">📋</span><div><strong>策略引擎</strong><span style="color:var(--text-muted);font-size:12px;">block / require_approval / allow 三级裁决</span></div></div>
-      <div class="spec-item"><span class="spec-icon">🌊</span><div><strong>SSE 推送</strong><span style="color:var(--text-muted);font-size:12px;">实时事件流推送至监控面板</span></div></div>
-      <div class="spec-item"><span class="spec-icon">🔗</span><div><strong>证据链</strong><span style="color:var(--text-muted);font-size:12px;">自动构建攻击证据链，支持回溯分析</span></div></div>
-    </div>
-  </div>
-
   <!-- 架构图 -->
   <div class="section">
     <div class="section-title">🏗️ 敏感数据流向监控</div>
@@ -415,6 +365,56 @@
         <text x="430" y="322" text-anchor="middle" font-size="13" font-weight="800" fill="#059669">🔍 关联分析能力概览</text>
         <text x="430" y="344" text-anchor="middle" font-size="11" fill="#475569">多 Agent 会话事件统一采集 → 时序对齐与拓扑关联 → 证据链自动构建 → 跨会话攻击链路追溯 → 全局风险评分</text>
       </svg>
+    </div>
+  </div>
+
+  <!-- 核心能力 -->
+  <div class="section">
+    <div class="section-title">✨ 核心能力</div>
+    <div class="features">
+      <div class="feature">
+        <div class="feat-icon">🛡️</div>
+        <div class="feat-title">实时监控面板</div>
+        <div class="feat-desc">Agent 运行状态、事件流、安全告警实时呈现，支持事件详情展开与证据链可视化。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🔍</div>
+        <div class="feat-title">Prompt 注入检测</div>
+        <div class="feat-desc">内置多维度注入检测引擎，覆盖越狱、系统提示泄露、忽略指令等攻击手法。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🔑</div>
+        <div class="feat-title">密钥匹配</div>
+        <div class="feat-desc">覆盖 19 类密钥 regex，实时扫描 Agent 输入/输出中的 API Key、Token、密码等敏感信息。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">📂</div>
+        <div class="feat-title">敏感路径扫描</div>
+        <div class="feat-desc">对文件读写操作进行路径安全审查，拦截 /etc/passwd、~/.ssh、.env 等敏感文件的访问。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🌐</div>
+        <div class="feat-title">网络策略审计</div>
+        <div class="feat-desc">对网络请求进行安全审计，检测 raw IP 访问、内网地址、黑名单 URL 等风险行为。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">全链路 Trace</div>
+        <div class="feat-desc">基于 parent_id / run_id / session_id 构建完整调用拓扑，实现 Agent 行为全链路可观测。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 技术规格 -->
+  <div class="section">
+    <div class="section-title">📐 技术规格</div>
+    <div class="spec-list">
+      <div class="spec-item"><span class="spec-icon">⚡</span><div><strong>超低延迟</strong><span style="color:var(--text-muted);font-size:12px;">p50 < 2ms</span></div></div>
+      <div class="spec-item"><span class="spec-icon">📦</span><div><strong>轻量嵌入</strong><span style="color:var(--text-muted);font-size:12px;">纯 TypeScript，零外部运行时依赖</span></div></div>
+      <div class="spec-item"><span class="spec-icon">🔌</span><div><strong>Hook 体系</strong><span style="color:var(--text-muted);font-size:12px;">6 个生命周期钩子无缝接入</span></div></div>
+      <div class="spec-item"><span class="spec-icon">📋</span><div><strong>策略引擎</strong><span style="color:var(--text-muted);font-size:12px;">block / require_approval / allow 三级裁决</span></div></div>
+      <div class="spec-item"><span class="spec-icon">🌊</span><div><strong>SSE 推送</strong><span style="color:var(--text-muted);font-size:12px;">实时事件流推送至监控面板</span></div></div>
+      <div class="spec-item"><span class="spec-icon">🔗</span><div><strong>证据链</strong><span style="color:var(--text-muted);font-size:12px;">自动构建攻击证据链，支持回溯分析</span></div></div>
     </div>
   </div>
 
