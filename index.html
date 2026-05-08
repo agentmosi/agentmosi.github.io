@@ -173,6 +173,56 @@
     <p>一套轻量级、可嵌入的 Agent 运行时安全检测系统，覆盖 Prompt 注入检测、工具调用审查、敏感路径扫描与密钥匹配——为 AI Agent 提供全链路行为可见性与实时安全阻断能力。</p>
   </div>
 
+  <!-- 核心能力 -->
+  <div class="section">
+    <div class="section-title">✨ 核心能力</div>
+    <div class="features">
+      <div class="feature">
+        <div class="feat-icon">🛡️</div>
+        <div class="feat-title">实时监控面板</div>
+        <div class="feat-desc">Agent 运行状态、事件流、安全告警实时呈现，支持事件详情展开与证据链可视化。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🔍</div>
+        <div class="feat-title">Prompt 注入检测</div>
+        <div class="feat-desc">内置多维度注入检测引擎，覆盖越狱、系统提示泄露、忽略指令等攻击手法。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🔑</div>
+        <div class="feat-title">密钥匹配</div>
+        <div class="feat-desc">覆盖 19 类密钥 regex，实时扫描 Agent 输入/输出中的 API Key、Token、密码等敏感信息。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">📂</div>
+        <div class="feat-title">敏感路径扫描</div>
+        <div class="feat-desc">对文件读写操作进行路径安全审查，拦截 /etc/passwd、~/.ssh、.env 等敏感文件的访问。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🌐</div>
+        <div class="feat-title">网络策略审计</div>
+        <div class="feat-desc">对网络请求进行安全审计，检测 raw IP 访问、内网地址、黑名单 URL 等风险行为。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">全链路 Trace</div>
+        <div class="feat-desc">基于 parent_id / run_id / session_id 构建完整调用拓扑，实现 Agent 行为全链路可观测。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 技术规格 -->
+  <div class="section">
+    <div class="section-title">📐 技术规格</div>
+    <div class="spec-list">
+      <div class="spec-item"><span class="spec-icon">⚡</span><div><strong>超低延迟</strong><span style="color:var(--text-muted);font-size:12px;">p50 < 2ms</span></div></div>
+      <div class="spec-item"><span class="spec-icon">📦</span><div><strong>轻量嵌入</strong><span style="color:var(--text-muted);font-size:12px;">纯 TypeScript，零外部运行时依赖</span></div></div>
+      <div class="spec-item"><span class="spec-icon">🔌</span><div><strong>Hook 体系</strong><span style="color:var(--text-muted);font-size:12px;">6 个生命周期钩子无缝接入</span></div></div>
+      <div class="spec-item"><span class="spec-icon">📋</span><div><strong>策略引擎</strong><span style="color:var(--text-muted);font-size:12px;">block / require_approval / allow 三级裁决</span></div></div>
+      <div class="spec-item"><span class="spec-icon">🌊</span><div><strong>SSE 推送</strong><span style="color:var(--text-muted);font-size:12px;">实时事件流推送至监控面板</span></div></div>
+      <div class="spec-item"><span class="spec-icon">🔗</span><div><strong>证据链</strong><span style="color:var(--text-muted);font-size:12px;">自动构建攻击证据链，支持回溯分析</span></div></div>
+    </div>
+  </div>
+
   <!-- 架构图 -->
   <div class="section">
     <div class="section-title">🏗️ 敏感数据流向监控</div>
@@ -288,7 +338,7 @@
   <div class="section">
     <div class="section-title">🔗 全局 Agent 行为关联分析</div>
     <div class="flow-svg-wrapper">
-      <svg class="flow-svg" viewBox="0 0 780 380" xmlns="http://www.w3.org/2000/svg">
+      <svg class="flow-svg" viewBox="0 0 860 380" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <filter id="fs2" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/></filter>
           <marker id="agc" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6366f1"/></marker>
@@ -297,7 +347,7 @@
           <linearGradient id="gp2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f3ff"/><stop offset="1" stop-color="#ede9fe"/></linearGradient>
           <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecfdf5"/><stop offset="1" stop-color="#d1fae5"/></linearGradient>
         </defs>
-        <rect x="0" y="0" width="780" height="380" rx="14" fill="transparent"/>
+        <rect x="0" y="0" width="860" height="380" rx="14" fill="transparent"/>
 
         <!-- Session A -->
         <rect x="20" y="20" width="150" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#fs2)"/>
@@ -361,92 +411,22 @@
         <text x="445" y="258" font-size="9" fill="#ef4444" font-weight="700">跨会话关联威胁</text>
 
         <!-- Bottom Annotations -->
-        <rect x="20" y="300" width="720" height="65" rx="10" fill="url(#gg)" stroke="#a7f3d0" stroke-width="1.2" filter="url(#fs2)"/>
-        <text x="380" y="322" text-anchor="middle" font-size="13" font-weight="800" fill="#059669">🔍 关联分析能力概览</text>
-        <text x="380" y="344" text-anchor="middle" font-size="11" fill="#475569">多 Agent 会话事件统一采集 → 时序对齐与拓扑关联 → 证据链自动构建 → 跨会话攻击链路追溯 → 全局风险评分</text>
+        <rect x="20" y="300" width="820" height="65" rx="10" fill="url(#gg)" stroke="#a7f3d0" stroke-width="1.2" filter="url(#fs2)"/>
+        <text x="430" y="322" text-anchor="middle" font-size="13" font-weight="800" fill="#059669">🔍 关联分析能力概览</text>
+        <text x="430" y="344" text-anchor="middle" font-size="11" fill="#475569">多 Agent 会话事件统一采集 → 时序对齐与拓扑关联 → 证据链自动构建 → 跨会话攻击链路追溯 → 全局风险评分</text>
       </svg>
     </div>
   </div>
 
-  <!-- 核心能力 -->
+  <!-- 规则库 -->
   <div class="section">
-    <div class="section-title">⚡ 核心能力</div>
-    <div class="features">
-      <div class="feature">
-        <div class="feat-icon">🛡️</div>
-        <div class="feat-title">Prompt 注入检测</div>
-        <div class="feat-desc">识别越狱攻击、目标劫持、角色覆盖等注入模式，在 Prompt 构建阶段拦截恶意指令。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">🔍</div>
-        <div class="feat-title">危险命令审查</div>
-        <div class="feat-desc">拦截 curl | bash、rm -rf、chmod 777 等高危 Shell 命令，支持命令模式匹配规则。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">🗝️</div>
-        <div class="feat-title">密钥泄露检测</div>
-        <div class="feat-desc">匹配 GitHub Token、AWS Access Key、OpenAI API Key 等 19 类密钥格式，防止敏感凭据外泄。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">📁</div>
-        <div class="feat-title">敏感路径保护</div>
-        <div class="feat-desc">阻断对 /etc/passwd、~/.ssh、.env 等敏感文件的读写操作，守护系统核心资产。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">🌐</div>
-        <div class="feat-title">网络出站控制</div>
-        <div class="feat-desc">检测以 raw IP 访问、内网地址泄露等异常网络行为，支持自定义黑名单 URL 匹配。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">📊</div>
-        <div class="feat-title">实时监控面板</div>
-        <div class="feat-desc">SSE 实时事件推送、统计数据可视化、事件详情模态窗口——完整还原 Agent 行为轨迹。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">🔗</div>
-        <div class="feat-title">证据链追踪</div>
-        <div class="feat-desc">从触发性事件反向遍历父级事件，自动生成完整攻击链路证据，支持审计回溯。</div>
-      </div>
-      <div class="feature">
-        <div class="feat-icon">🔌</div>
-        <div class="feat-title">OpenClaw / KiloCode 集成</div>
-        <div class="feat-desc">作为 Agent Framework 的安全 Hook 即插即用，与 OpenClaw Gateway / KiloCode 自由组合。</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 技术规格 -->
-  <div class="section">
-    <div class="section-title">📐 技术规格</div>
+    <div class="section-title">📋 安全规则库</div>
     <div class="card">
-      <div class="spec-list">
-        <div class="spec-item"><span class="spec-icon">🖥️</span><div><strong>运行时</strong>Node.js 18+ / TypeScript</div></div>
-        <div class="spec-item"><span class="spec-icon">💾</span><div><strong>存储</strong>SQLite (better-sqlite3) 本地持久化</div></div>
-        <div class="spec-item"><span class="spec-icon">📡</span><div><strong>实时推送</strong>Server-Sent Events (SSE)</div></div>
-        <div class="spec-item"><span class="spec-icon">📋</span><div><strong>安全策略</strong>JSON 规则文件 + 热更新监听</div></div>
-        <div class="spec-item"><span class="spec-icon">⚖️</span><div><strong>裁决动作</strong>allow / block / require_approval</div></div>
-        <div class="spec-item"><span class="spec-icon">🪝</span><div><strong>挂载点</strong>6 个安全 Hook 覆盖完整对话生命周期</div></div>
-        <div class="spec-item"><span class="spec-icon">🎯</span><div><strong>检出维度</strong>7 类 Findings（注入/命令/密钥/路径/网络/文件/通用）</div></div>
-        <div class="spec-item"><span class="spec-icon">🔐</span><div><strong>部署模式</strong>本地 Sidecar · 内网 · air-gapped 均支持</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 安全策略规则 -->
-  <div class="section">
-    <div class="section-title">📋 安全策略规则</div>
-    <div class="card" style="overflow-x:auto;">
       <table class="rules-table">
         <thead>
-          <tr><th>规则名称</th><th>检测类型</th><th>动作</th><th>匹配模式</th><th>风险分</th></tr>
+          <tr><th>规则 ID</th><th>类型</th><th>动作</th><th>说明</th><th>风险分数</th></tr>
         </thead>
         <tbody>
-          <tr><td>curlbash</td><td>命令审查</td><td><span class="badge badge-block">block</span></td><td><code>curl ... | bash</code></td><td>95</td></tr>
-          <tr><td>rmrf</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>rm -rf</code></td><td>90</td></tr>
-          <tr><td>chmod777</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>chmod 777</code></td><td>70</td></tr>
-          <tr><td>sudo-exec</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>sudo ...</code></td><td>60</td></tr>
-          <tr><td>pip-install</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>pip install ...</code></td><td>30</td></tr>
-          <tr><td>npm-install-global</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>npm i -g ...</code></td><td>30</td></tr>
           <tr><td>secret-in-prompt</td><td>密钥匹配</td><td><span class="badge badge-block">block</span></td><td>19 类密钥 regex</td><td>85</td></tr>
           <tr><td>sensitive-path-read</td><td>路径扫描</td><td><span class="badge badge-block">block</span></td><td>/etc/passwd, ~/.ssh 等</td><td>90</td></tr>
           <tr><td>sensitive-path-write</td><td>路径扫描</td><td><span class="badge badge-block">block</span></td><td>/etc, ~/.ssh, .env 等</td><td>95</td></tr>
