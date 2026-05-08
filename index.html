@@ -137,6 +137,23 @@
   .method-put { background: #fef3c7; color: #d97706; }
   .endpoint .path { color: var(--text); }
 
+  .code-block {
+    background: #1e293b; border: 1px solid #334155; border-radius: var(--radius-sm);
+    padding: 20px 24px; overflow-x: auto; position: relative; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.8; color: #e2e8f0; white-space: pre;
+    box-shadow: var(--shadow-sm);
+  }
+  .code-block .lang-tag {
+    position: absolute; top: 10px; right: 16px; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #64748b; font-weight: 600;
+  }
+  .code-block .key   { color: #93c5fd; }
+  .code-block .str   { color: #a5b4fc; }
+  .code-block .num   { color: #fbbf24; }
+  .code-block .bool  { color: #67e8f9; }
+  .code-block .cmt   { color: #64748b; font-style: italic; }
+  .code-block .brack { color: #94a3b8; }
+
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -416,6 +433,33 @@
       <div class="spec-item"><span class="spec-icon">🌊</span><div><strong>SSE 推送</strong><span style="color:var(--text-muted);font-size:12px;">实时事件流推送至监控面板</span></div></div>
       <div class="spec-item"><span class="spec-icon">🔗</span><div><strong>证据链</strong><span style="color:var(--text-muted);font-size:12px;">自动构建攻击证据链，支持回溯分析</span></div></div>
     </div>
+  </div>
+
+  <!-- 在 OpenClaw 注册 AgentMoss -->
+  <div class="section">
+    <div class="section-title">🔌 在 OpenClaw 注册 AgentMoss</div>
+    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">在 OpenClaw 配置文件 <code style="background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:12.5px;">openclaw.json</code> 的 <code>plugins</code> 段中添加以下内容即可将 AgentMoss 安全引擎嵌入 Agent 生命周期，对所有工具调用进行实时审查。</p>
+    <div class="code-block">
+<span class="lang-tag">openclaw.json</span><span class="brack">{</span>
+  <span class="key">"plugins"</span><span class="brack">:</span> <span class="brack">{</span>
+    <span class="key">"entries"</span><span class="brack">:</span> <span class="brack">{</span>
+      <span class="key">"agentmonitor"</span><span class="brack">:</span> <span class="brack">{</span>
+        <span class="key">"enabled"</span><span class="brack">:</span> <span class="bool">true</span><span class="brack">,</span>
+        <span class="cmt">// ⬇️ AgentMoss 安全监测服务地址</span>
+        <span class="key">"config"</span><span class="brack">:</span> <span class="brack">{</span>
+          <span class="key">"monitorUrl"</span><span class="brack">:</span>      <span class="str">"http://127.0.0.1:19877"</span><span class="brack">,</span>
+          <span class="key">"timeoutMs"</span><span class="brack">:</span>        <span class="num">80</span><span class="brack">,</span>                 <span class="cmt">// 实时检查超时，建议 ≤ 100ms</span>
+          <span class="key">"failClosedOnError"</span><span class="brack">:</span> <span class="bool">true</span><span class="brack">,</span>  <span class="cmt">// 监控不可用时阻断工具调用</span>
+          <span class="key">"observeHooks"</span><span class="brack">:</span>      <span class="bool">true</span><span class="brack">,</span>  <span class="cmt">// 采集模型输入输出、工具结果等观察事件</span>
+          <span class="key">"auditOnly"</span><span class="brack">:</span>        <span class="bool">false</span>   <span class="cmt">// 关闭纯审计模式，真正执行阻断</span>
+        <span class="brack">}</span>
+      <span class="brack">}</span>
+    <span class="brack">}</span><span class="brack">,</span>
+    <span class="key">"allow"</span><span class="brack">:</span> <span class="brack">[</span><span class="str">"agentmonitor"</span><span class="brack">,</span> <span class="cmt">/* 其他插件 ... */</span><span class="brack">]</span>
+  <span class="brack">}</span>
+<span class="brack">}</span>
+    </div>
+    <p style="color:var(--text-muted);font-size:12px;margin-top:12px;line-height:1.7;">💡 注册后 OpenClaw 会在 <strong>before_tool_call</strong> 钩子将工具调用参数发送给 AgentMoss 安全引擎；引擎依据安全规则库执行注入检测、密钥匹配、路径扫描等策略，返回 <code>allow</code> / <code>block</code> / <code>require_approval</code> 三级裁决；高风险操作被实时阻断并触发告警。</p>
   </div>
 
   <!-- 规则库 -->
