@@ -1,286 +1,426 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgentMoss — Agent Runtime Behavior Transparency</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>介绍 · AgentMoss — Agent 行为安全监测引擎</title>
 <style>
   :root {
-    --bg: #fafafa;
-    --card: #ffffff;
-    --text: #1a1a2e;
-    --text-secondary: #555;
-    --accent: #2d6a4f;
-    --accent-light: #d8f3dc;
-    --border: #e0e0e0;
-    --code-bg: #f4f4f5;
-    --radius: 8px;
-    --max-width: 780px;
+    --bg: #f7f8fc;
+    --surface: #ffffff;
+    --surface-alt: #fafbfd;
+    --border-light: #f0f2f7;
+    --border: #e8ebf2;
+    --text: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent: #6366f1;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --info: #3b82f6;
+    --radius-xs: 6px;
+    --radius-sm: 10px;
+    --radius: 14px;
+    --radius-lg: 18px;
+    --shadow-xs: 0 1px 2px rgba(15,23,42,0.04);
+    --shadow-sm: 0 1px 3px rgba(15,23,42,0.05);
+    --shadow-md: 0 8px 24px rgba(15,23,42,0.06);
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.7;
+    font: 15px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    letter-spacing: -0.01em;
   }
-  .container {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 40px 24px 60px;
+  .topbar {
+    height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px;
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255,255,255,0.82);
+    border-bottom: 1px solid rgba(232,235,242,0.8);
   }
+  .topbar-brand { display: flex; align-items: center; gap: 12px; font-size: 17px; font-weight: 700; }
+  .topbar-brand .logo {
+    width: 36px; height: 36px; background: var(--accent-gradient); border-radius: var(--radius-xs);
+    display: flex; align-items: center; justify-content: center; font-size: 17px; color: #fff;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+  }
+  .brand-name {
+    font-weight: 800;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); border-radius: var(--radius-xs);
+    padding: 7px 14px; cursor: pointer; font-size: 13px; font-weight: 600; text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: #f4f6fb; border-color: #c8cfe0; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .btn-sm { padding: 5px 11px; font-size: 12px; border-radius: 6px; }
 
-  /* ── Hero ── */
-  .hero {
-    text-align: center;
-    padding: 60px 0 40px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 48px;
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 28px 80px; }
+  .hero { text-align: center; margin-bottom: 48px; }
+  .hero h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .hero h1 .gradient {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .hero h1 {
-    font-size: 2.6rem;
-    font-weight: 700;
+  .hero p { color: var(--text-secondary); font-size: 17px; max-width: 600px; margin: 0 auto; line-height: 1.8; }
+
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 20px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
     letter-spacing: -0.02em;
-    color: var(--text);
-    margin-bottom: 12px;
   }
-  .hero .subtitle {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    font-weight: 400;
-    max-width: 520px;
-    margin: 0 auto 24px;
+  .card {
+    background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg);
+    padding: 24px 28px; box-shadow: var(--shadow-xs); transition: box-shadow var(--transition);
   }
-  .hero .cn-subtitle {
-    font-size: 0.95rem;
-    color: #888;
+  .card:hover { box-shadow: var(--shadow-sm); }
+
+  .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .feature {
+    background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius);
+    padding: 20px 24px; box-shadow: var(--shadow-xs); transition: all var(--transition);
   }
-  .badge-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 20px;
+  .feature:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: #c8cfe0; }
+  .feature .feat-icon { font-size: 28px; margin-bottom: 10px; }
+  .feature .feat-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .feature .feat-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+  .flow-svg-wrapper {
+    background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg);
+    padding: 30px 20px 20px; display: flex; justify-content: center; overflow-x: auto; box-shadow: var(--shadow-xs);
   }
+  .flow-svg { max-width: 100%; height: auto; min-width: 680px; }
+
+  .rules-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .rules-table th {
+    text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted); padding: 10px 14px 8px; border-bottom: 2px solid var(--border-light);
+    font-weight: 700;
+  }
+  .rules-table td { padding: 11px 14px; border-bottom: 1px solid var(--border-light); color: var(--text-secondary); }
+  .rules-table tr:hover td { background: var(--surface-alt); }
   .badge {
-    display: inline-block;
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 0.82rem;
-    font-weight: 500;
+    display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700;
   }
-  .badge-accent { background: var(--accent-light); color: var(--accent); }
-  .badge-neutral { background: #eee; color: #555; }
+  .badge-block { background: #fef2f2; color: #dc2626; }
+  .badge-warn { background: #fffbeb; color: #d97706; }
+  .badge-allow { background: #ecfdf5; color: #059669; }
 
-  /* ── Sections ── */
-  section {
-    margin-bottom: 48px;
-  }
-  section h2 {
-    font-size: 1.35rem;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: var(--accent);
-    border-left: 3px solid var(--accent);
-    padding-left: 14px;
-  }
-  section p, section li {
-    color: var(--text-secondary);
-    font-size: 0.98rem;
-  }
-  section ul {
-    list-style: none;
-    padding: 0;
-  }
-  section li {
-    padding: 6px 0 6px 20px;
-    position: relative;
-  }
-  section li::before {
-    content: "▸";
-    position: absolute;
-    left: 0;
-    color: var(--accent);
-    font-size: 0.75rem;
-    top: 8px;
-  }
+  .spec-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .spec-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; background: #f8f9fc; border-radius: var(--radius-sm); font-size: 13.5px; }
+  .spec-item .spec-icon { font-size: 22px; flex-shrink: 0; }
+  .spec-item strong { display: block; margin-bottom: 2px; font-size: 13px; }
 
-  /* ── Abstract ── */
-  .abstract-box {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 28px;
+  .endpoint {
+    background: #f8f9fc; border: 1px solid var(--border-light); border-radius: var(--radius-sm);
+    padding: 10px 16px; margin-bottom: 8px; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 12.5px; display: flex; align-items: center; gap: 12px;
   }
-  .abstract-box p { margin-bottom: 12px; }
-  .abstract-box p:last-child { margin-bottom: 0; }
+  .endpoint .method {
+    font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .method-get { background: #dbeafe; color: #1d4ed8; }
+  .method-post { background: #d1fae5; color: #059669; }
+  .method-put { background: #fef3c7; color: #d97706; }
+  .endpoint .path { color: var(--text); }
 
-  /* ── Architecture ── */
-  .arch-diagram {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 32px;
-    text-align: center;
-    overflow-x: auto;
-  }
-  .arch-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin: 12px 0;
-  }
-  .arch-box {
-    background: var(--accent-light);
-    color: var(--accent);
-    border-radius: var(--radius);
-    padding: 12px 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .arch-arrow { font-size: 1.2rem; color: #aaa; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-  /* ── Links ── */
-  .link-card {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 20px;
-    text-decoration: none;
-    color: var(--text);
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin: 4px 6px 4px 0;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .link-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  }
-  .link-card svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-  /* ── Footer ── */
-  footer {
-    text-align: center;
-    padding-top: 32px;
-    border-top: 1px solid var(--border);
-    color: #aaa;
-    font-size: 0.82rem;
-  }
-
-  /* ── Code ── */
-  code {
-    background: var(--code-bg);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.88em;
+  @media (max-width: 768px) {
+    .features { grid-template-columns: 1fr; }
+    .spec-list { grid-template-columns: 1fr; }
+    .container { padding: 24px 16px 60px; }
+    .hero h1 { font-size: 26px; }
   }
 </style>
 </head>
 <body>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="logo">🌿</div>
+    <div class="brand-text">
+      <span class="brand-name">AgentMoss</span>
+      <span style="font-size:12px;color:#94a3b8;font-weight:500;margin-left:6px;">· Agent行为全链路监控与安全分析</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a href="/" class="btn btn-sm">📊 监控面板</a>
+    <span class="btn btn-sm" style="background:var(--accent-gradient);color:#fff;border:none;pointer-events:none;">📖 介绍</span>
+  </div>
+</header>
+
 <div class="container">
 
-  <!-- ════ Hero ════ -->
-  <header class="hero">
-    <h1>AgentMoss</h1>
-    <p class="subtitle">
-      Runtime Behavior Transparency &amp; Long-Horizon Analysis for Autonomous Agents
-    </p>
-    <p class="cn-subtitle">
-      Agent 运行时行为透明性与长时程分析方法
-    </p>
-    <div class="badge-row">
-      <span class="badge badge-accent">ICSE 2027 (under review)</span>
-      <span class="badge badge-neutral">LLM Agent</span>
-      <span class="badge badge-neutral">Runtime Monitoring</span>
-      <span class="badge badge-neutral">Transparency</span>
+  <!-- Hero -->
+  <div class="hero">
+    <h1>🌿 <span class="gradient">AgentMoss</span> 安全监测引擎</h1>
+    <p>一套轻量级、可嵌入的 Agent 运行时安全检测系统，覆盖 Prompt 注入检测、工具调用审查、敏感路径扫描与密钥匹配——为 AI Agent 提供全链路行为可见性与实时安全阻断能力。</p>
+  </div>
+
+  <!-- 架构图 -->
+  <div class="section">
+    <div class="section-title">🏗️ 系统架构与数据流向</div>
+    <div class="flow-svg-wrapper">
+      <svg class="flow-svg" viewBox="0 0 780 380" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="fs" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/></filter>
+          <marker id="ag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#10b981"/></marker>
+          <marker id="ar" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#ef4444"/></marker>
+          <marker id="ab" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+          <marker id="aa" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#f59e0b"/></marker>
+          <linearGradient id="gs" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ecfdf5"/><stop offset="1" stop-color="#d1fae5"/></linearGradient>
+          <linearGradient id="gd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fef2f2"/><stop offset="1" stop-color="#fee2e2"/></linearGradient>
+          <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#dbeafe"/></linearGradient>
+          <linearGradient id="ga" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fffbeb"/><stop offset="1" stop-color="#fef3c7"/></linearGradient>
+          <linearGradient id="gp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f3ff"/><stop offset="1" stop-color="#ede9fe"/></linearGradient>
+        </defs>
+        <rect x="0" y="0" width="780" height="380" rx="14" fill="transparent"/>
+
+        <!-- User Input -->
+        <rect x="20" y="30" width="140" height="52" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#fs)"/>
+        <text x="90" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#475569">👤 用户输入</text>
+        <text x="90" y="70" text-anchor="middle" font-size="10" fill="#94a3b8">User Prompt / 外部数据</text>
+
+        <!-- Agent LLM -->
+        <rect x="230" y="30" width="150" height="52" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#fs)"/>
+        <text x="305" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#475569">🧠 Agent / LLM</text>
+        <text x="305" y="70" text-anchor="middle" font-size="10" fill="#94a3b8">模型推理 & 工具编排</text>
+
+        <!-- Tool Output -->
+        <rect x="450" y="30" width="150" height="52" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#fs)"/>
+        <text x="525" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#475569">⚙️ 工具输出</text>
+        <text x="525" y="70" text-anchor="middle" font-size="10" fill="#94a3b8">bash / file / network</text>
+
+        <!-- Sensitive Data -->
+        <rect x="640" y="30" width="120" height="52" rx="10" fill="url(#gd)" stroke="#fca5a5" stroke-width="1.5" filter="url(#fs)"/>
+        <text x="700" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#dc2626">⚠️ 敏感数据</text>
+        <text x="700" y="70" text-anchor="middle" font-size="10" fill="#ef4444">密钥 / token / 内网</text>
+
+        <!-- Arrows top row -->
+        <line x1="160" y1="56" x2="228" y2="56" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ab)"/>
+        <line x1="380" y1="56" x2="448" y2="56" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ab)"/>
+        <line x1="600" y1="56" x2="638" y2="56" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+
+        <!-- AgentMoss Monitor -->
+        <rect x="200" y="130" width="380" height="58" rx="12" fill="url(#gm)" stroke="#bfdbfe" stroke-width="2" filter="url(#fs)"/>
+        <text x="390" y="153" text-anchor="middle" font-size="14" font-weight="800" fill="#1d4ed8">🌿 AgentMoss 安全监测引擎</text>
+        <text x="390" y="174" text-anchor="middle" font-size="11" fill="#3b82f6">注入检测 · 命令审查 · 路径扫描 · 密钥匹配 · 网络策略</text>
+
+        <!-- Down arrows to monitor -->
+        <path d="M 305 82 L 305 128" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ab)" fill="none"/>
+        <path d="M 525 82 L 525 128" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ab)" fill="none"/>
+        <path d="M 90 82 L 90 108 L 330 108 L 330 128" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,3" fill="none"/>
+
+        <!-- Safe Path -->
+        <rect x="40" y="240" width="160" height="50" rx="10" fill="url(#gs)" stroke="#a7f3d0" stroke-width="1.5" filter="url(#fs)"/>
+        <text x="120" y="262" text-anchor="middle" font-size="24">✅</text>
+        <text x="120" y="282" text-anchor="middle" font-size="12" font-weight="700" fill="#059669">安全放行</text>
+
+        <!-- Arrow to Safe -->
+        <path d="M 230 188 L 230 220 L 120 220 L 120 238" stroke="#10b981" stroke-width="1.8" marker-end="url(#ag)" fill="none"/>
+
+        <!-- Policy Engine -->
+        <rect x="250" y="240" width="280" height="50" rx="10" fill="url(#gp)" stroke="#c4b5fd" stroke-width="1.5" filter="url(#fs)"/>
+        <text x="390" y="262" text-anchor="middle" font-size="14" font-weight="800" fill="#7c3aed">🛡️ 策略引擎裁决</text>
+        <text x="390" y="282" text-anchor="middle" font-size="11" fill="#8b5cf6">block · require_approval · allow</text>
+
+        <!-- Arrow to Policy -->
+        <path d="M 390 188 L 390 238" stroke="#8b5cf6" stroke-width="2" marker-end="url(#ab)" fill="none"/>
+
+        <!-- Blocked -->
+        <rect x="580" y="240" width="160" height="50" rx="10" fill="url(#gd)" stroke="#fca5a5" stroke-width="1.5" filter="url(#fs)"/>
+        <text x="660" y="262" text-anchor="middle" font-size="24">🚫</text>
+        <text x="660" y="282" text-anchor="middle" font-size="12" font-weight="700" fill="#dc2626">已阻断</text>
+
+        <!-- Arrow to Blocked -->
+        <path d="M 530 265 L 578 265" stroke="#ef4444" stroke-width="1.8" marker-end="url(#ar)" fill="none"/>
+
+        <!-- Policy to Safe -->
+        <line x1="250" y1="265" x2="202" y2="265" stroke="#10b981" stroke-width="1.5" marker-end="url(#ag)"/>
+
+        <!-- Danger flow -->
+        <path d="M 640 82 L 640 150 L 720 150 L 720 238" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="6,4" fill="none" opacity="0.4"/>
+        <circle r="5" fill="#ef4444" opacity="0.7">
+          <animateMotion dur="3s" repeatCount="indefinite" path="M 640 82 L 640 150 L 720 150 L 720 238"/>
+        </circle>
+
+        <!-- Alert -->
+        <rect x="600" y="310" width="140" height="38" rx="8" fill="url(#ga)" stroke="#fcd34d" stroke-width="1.2" filter="url(#fs)"/>
+        <text x="670" y="334" text-anchor="middle" font-size="12" font-weight="700" fill="#d97706">🔔 安全告警</text>
+
+        <!-- Blocked to Alert -->
+        <path d="M 660 290 L 660 308" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#aa)" fill="none"/>
+
+        <!-- Annotations -->
+        <text x="195" y="105" font-size="9" fill="#94a3b8" font-style="italic">🔍 所有 Agent 行为实时采集</text>
+        <text x="20" y="340" font-size="10" fill="#64748b">💡 正常数据流经安全检查后放行；敏感操作（密钥泄露、</text>
+        <text x="20" y="358" font-size="10" fill="#64748b">路径穿透、危险命令）被策略引擎阻断并触发告警。</text>
+
+        <!-- Animated dots -->
+        <circle r="3" fill="#3b82f6" opacity="0.6"><animateMotion dur="2s" repeatCount="indefinite" path="M 160 56 L 228 56"/></circle>
+        <circle r="3" fill="#3b82f6" opacity="0.6"><animateMotion dur="2.5s" repeatCount="indefinite" path="M 380 56 L 448 56"/></circle>
+        <circle r="3.5" fill="#1d4ed8" opacity="0.7"><animateMotion dur="2s" repeatCount="indefinite" path="M 305 82 L 305 128"/></circle>
+        <circle r="3.5" fill="#1d4ed8" opacity="0.7"><animateMotion dur="2.2s" repeatCount="indefinite" path="M 525 82 L 525 128"/></circle>
+        <circle r="3" fill="#8b5cf6" opacity="0.6"><animateMotion dur="2s" repeatCount="indefinite" path="M 390 188 L 390 238"/></circle>
+        <circle r="3" fill="#10b981" opacity="0.6"><animateMotion dur="2.5s" repeatCount="indefinite" path="M 250 265 L 202 265"/></circle>
+        <circle r="3" fill="#ef4444" opacity="0.6"><animateMotion dur="2.2s" repeatCount="indefinite" path="M 530 265 L 578 265"/></circle>
+      </svg>
     </div>
-  </header>
+  </div>
 
-  <!-- ════ Abstract ════ -->
-  <section>
-    <h2>Abstract</h2>
-    <div class="abstract-box">
-      <p>
-        As autonomous agents powered by large language models are increasingly deployed in 
-        software engineering tasks — from code generation to multi-step debugging — a 
-        fundamental problem remains: <strong>we cannot see what agents actually do at runtime</strong>. 
-        Existing evaluation frameworks focus on task-level success rates, but offer no lens 
-        into the internal decision trajectories, tool-use patterns, and failure cascades 
-        that determine real-world reliability.
-      </p>
-      <p>
-        <strong>AgentMoss</strong> introduces a <em>runtime transparency framework</em> that instruments 
-        agent execution with lightweight hooks — capturing fine-grained traces of 
-        reasoning, tool invocation, environment interaction, and state mutation — and 
-        projects them into a structured, queryable representation. We propose a set of 
-        transparency metrics grounded in information flow analysis, and demonstrate how 
-        long-horizon trace analysis reveals emergent failure modes invisible to 
-        conventional evaluation.
-      </p>
-    </div>
-  </section>
-
-  <!-- ════ Key Contributions ════ -->
-  <section>
-    <h2>Contributions</h2>
-    <ul>
-      <li><strong>Runtime hook instrumentation</strong> — a non-invasive adaptor-based tracing architecture (via <code>httpx</code>) that captures reasoning, tool calls, and environment state changes without modifying agent source code.</li>
-      <li><strong>Structured trace representation</strong> — a unified trace schema that normalizes heterogeneous agent frameworks into comparable execution graphs.</li>
-      <li><strong>Transparency metrics</strong> — quantitative measures of behavioral visibility, information flow, and decision consistency across long-horizon runs.</li>
-      <li><strong>Empirical study</strong> — analysis of 5 popular agent frameworks over 200+ multi-turn tasks, identifying recurrent failure patterns and their trace-level signatures.</li>
-    </ul>
-  </section>
-
-  <!-- ════ Architecture ════ -->
-  <section>
-    <h2>Architecture Overview</h2>
-    <div class="arch-diagram">
-      <div class="arch-row">
-        <span class="arch-box">Agent Framework</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-box">httpx Adapter</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-box">ClawTrace Engine</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-box">Trace Store</span>
+  <!-- 核心能力 -->
+  <div class="section">
+    <div class="section-title">⚡ 核心能力</div>
+    <div class="features">
+      <div class="feature">
+        <div class="feat-icon">🛡️</div>
+        <div class="feat-title">Prompt 注入检测</div>
+        <div class="feat-desc">识别越狱攻击、目标劫持、角色覆盖等注入模式，在 Prompt 构建阶段拦截恶意指令。</div>
       </div>
-      <div style="margin-top:14px; font-size:0.82rem; color:#888;">
-        Non-invasive hooking at the HTTP transport layer → structured execution graph → interactive trace explorer
+      <div class="feature">
+        <div class="feat-icon">🔍</div>
+        <div class="feat-title">危险命令审查</div>
+        <div class="feat-desc">拦截 curl | bash、rm -rf、chmod 777 等高危 Shell 命令，支持命令模式匹配规则。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🗝️</div>
+        <div class="feat-title">密钥泄露检测</div>
+        <div class="feat-desc">匹配 GitHub Token、AWS Access Key、OpenAI API Key 等 19 类密钥格式，防止敏感凭据外泄。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">📁</div>
+        <div class="feat-title">敏感路径保护</div>
+        <div class="feat-desc">阻断对 /etc/passwd、~/.ssh、.env 等敏感文件的读写操作，守护系统核心资产。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🌐</div>
+        <div class="feat-title">网络出站控制</div>
+        <div class="feat-desc">检测以 raw IP 访问、内网地址泄露等异常网络行为，支持自定义黑名单 URL 匹配。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">实时监控面板</div>
+        <div class="feat-desc">SSE 实时事件推送、统计数据可视化、事件详情模态窗口——完整还原 Agent 行为轨迹。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🔗</div>
+        <div class="feat-title">证据链追踪</div>
+        <div class="feat-desc">从触发性事件反向遍历父级事件，自动生成完整攻击链路证据，支持审计回溯。</div>
+      </div>
+      <div class="feature">
+        <div class="feat-icon">🔌</div>
+        <div class="feat-title">OpenClaw / KiloCode 集成</div>
+        <div class="feat-desc">作为 Agent Framework 的安全 Hook 即插即用，与 OpenClaw Gateway / KiloCode 自由组合。</div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- ════ Links ════ -->
-  <section>
-    <h2>Resources</h2>
-    <div>
-      <a class="link-card" href="https://github.com/agentmosi" target="_blank">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        GitHub
-      </a>
-      <a class="link-card" href="#" target="_blank">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Paper (arXiv)
-      </a>
-      <a class="link-card" href="#" target="_blank">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
-        Documentation
-      </a>
+  <!-- 技术规格 -->
+  <div class="section">
+    <div class="section-title">📐 技术规格</div>
+    <div class="card">
+      <div class="spec-list">
+        <div class="spec-item"><span class="spec-icon">🖥️</span><div><strong>运行时</strong>Node.js 18+ / TypeScript</div></div>
+        <div class="spec-item"><span class="spec-icon">💾</span><div><strong>存储</strong>SQLite (better-sqlite3) 本地持久化</div></div>
+        <div class="spec-item"><span class="spec-icon">📡</span><div><strong>实时推送</strong>Server-Sent Events (SSE)</div></div>
+        <div class="spec-item"><span class="spec-icon">📋</span><div><strong>安全策略</strong>JSON 规则文件 + 热更新监听</div></div>
+        <div class="spec-item"><span class="spec-icon">⚖️</span><div><strong>裁决动作</strong>allow / block / require_approval</div></div>
+        <div class="spec-item"><span class="spec-icon">🪝</span><div><strong>挂载点</strong>6 个安全 Hook 覆盖完整对话生命周期</div></div>
+        <div class="spec-item"><span class="spec-icon">🎯</span><div><strong>检出维度</strong>7 类 Findings（注入/命令/密钥/路径/网络/文件/通用）</div></div>
+        <div class="spec-item"><span class="spec-icon">🔐</span><div><strong>部署模式</strong>本地 Sidecar · 内网 · air-gapped 均支持</div></div>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- ════ Footer ════ -->
-  <footer>
-    AgentMoss Project &copy; 2026 &nbsp;·&nbsp; Built with clarity in mind
-  </footer>
+  <!-- 安全策略规则 -->
+  <div class="section">
+    <div class="section-title">📋 安全策略规则</div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="rules-table">
+        <thead>
+          <tr><th>规则名称</th><th>检测类型</th><th>动作</th><th>匹配模式</th><th>风险分</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>curlbash</td><td>命令审查</td><td><span class="badge badge-block">block</span></td><td><code>curl ... | bash</code></td><td>95</td></tr>
+          <tr><td>rmrf</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>rm -rf</code></td><td>90</td></tr>
+          <tr><td>chmod777</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>chmod 777</code></td><td>70</td></tr>
+          <tr><td>sudo-exec</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>sudo ...</code></td><td>60</td></tr>
+          <tr><td>pip-install</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>pip install ...</code></td><td>30</td></tr>
+          <tr><td>npm-install-global</td><td>命令审查</td><td><span class="badge badge-warn">require_approval</span></td><td><code>npm i -g ...</code></td><td>30</td></tr>
+          <tr><td>secret-in-prompt</td><td>密钥匹配</td><td><span class="badge badge-block">block</span></td><td>19 类密钥 regex</td><td>85</td></tr>
+          <tr><td>sensitive-path-read</td><td>路径扫描</td><td><span class="badge badge-block">block</span></td><td>/etc/passwd, ~/.ssh 等</td><td>90</td></tr>
+          <tr><td>sensitive-path-write</td><td>路径扫描</td><td><span class="badge badge-block">block</span></td><td>/etc, ~/.ssh, .env 等</td><td>95</td></tr>
+          <tr><td>raw-ip-access</td><td>网络检测</td><td><span class="badge badge-warn">require_approval</span></td><td>raw IP URL</td><td>50</td></tr>
+          <tr><td>internal-host</td><td>网络检测</td><td><span class="badge badge-warn">require_approval</span></td><td>localhost / 127.* / 10.* / 192.168.*</td><td>60</td></tr>
+          <tr><td>prompt-injection</td><td>注入检测</td><td><span class="badge badge-block">block</span></td><td>ignore previous / system prompt leaking 等</td><td>80</td></tr>
+          <tr><td>deny-list-url</td><td>网络检测</td><td><span class="badge badge-block">block</span></td><td>自定义黑名单 URL</td><td>85</td></tr>
+          <tr><td>tool-call-volume</td><td>通用</td><td><span class="badge badge-warn">require_approval</span></td><td>工具调用频率 ≥ 10/min</td><td>40</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Hook 生命周期 -->
+  <div class="section">
+    <div class="section-title">🪝 Hook 挂载点</div>
+    <div class="card">
+      <p style="color:var(--text-secondary);font-size:13.5px;margin-bottom:18px;line-height:1.8;">
+        AgentMoss 在 Agent 对话生命周期的 6 个关键节点注入安全检查，与 OpenClaw/KiloCode 的原生 Security Hook 体系无缝对接：
+      </p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>message_received</strong> — 用户消息到达，第一时间检测 Prompt 注入</span></div>
+        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>before_prompt_build</strong> — 提示词构建前，检测系统消息污染与越狱</span></div>
+        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>llm_output</strong> — 模型输出后，检测输出中的密钥与敏感指令</span></div>
+        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>tool_call_check</strong> — 工具调用前，审查命令 / 路径 / 网络参数</span></div>
+        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>message_sending</strong> — 消息发出前，阻断包含敏感数据的回复</span></div>
+        <div class="endpoint"><span class="method method-get">HOOK</span><span class="path"><strong>session_end</strong> — 会话结束时，汇总运行风险评分并生成审计日志</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API 端点 -->
+  <div class="section">
+    <div class="section-title">🔌 API 端点一览</div>
+    <div class="card">
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/health</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/stats</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/events</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="path">/api/events</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/events/:id</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="path">/api/tool-call/check</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/runs</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/runs/:id</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/runs/:id/events</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/runs/:id/graph</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="path">/api/runs/:id/evidence-chain</span></div>
+      <div class="endpoint"><span class="method method-put">PUT</span><span class="path">/api/runs/:id/status</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/policy</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/rules</span></div>
+      <div class="endpoint"><span class="method method-put">PUT</span><span class="path">/api/rules</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/stream</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/high-risk</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="path">/api/evidence-chains/:id</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="path">/api/demo/seed</span></div>
+    </div>
+  </div>
 
 </div>
+
 </body>
 </html>
