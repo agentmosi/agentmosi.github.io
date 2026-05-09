@@ -200,6 +200,173 @@
     <p>一套轻量级、可嵌入的 Agent 运行时安全检测系统，覆盖 Prompt 注入检测、工具调用审查、敏感路径扫描与密钥匹配——为 AI Agent 提供全链路行为可见性与实时安全阻断能力。</p>
   </div>
 
+  <!-- 总体框架架构图 -->
+  <div class="section">
+    <div class="section-title">🏗️ AgentMoss 总体框架</div>
+    <div class="flow-svg-wrapper">
+      <svg class="flow-svg" viewBox="0 0 920 660" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="af0" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.06"/></filter>
+          <filter id="af1" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.1"/></filter>
+          <marker id="adn" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6366f1"/></marker>
+          <linearGradient id="agrad-agent" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#f1f5f9"/></linearGradient>
+          <linearGradient id="agrad-adapter" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#dbeafe"/></linearGradient>
+          <linearGradient id="agrad-ir" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f3ff"/><stop offset="1" stop-color="#ede9fe"/></linearGradient>
+          <linearGradient id="agrad-analysis" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff7ed"/><stop offset="1" stop-color="#ffedd5"/></linearGradient>
+          <linearGradient id="agrad-defense" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecfdf5"/><stop offset="1" stop-color="#d1fae5"/></linearGradient>
+          <linearGradient id="agrad-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafbfd"/><stop offset="1" stop-color="#f0f2f7"/></linearGradient>
+        </defs>
+
+        <!-- Background -->
+        <rect x="0" y="0" width="920" height="660" rx="14" fill="url(#agrad-bg)" stroke="#e8ebf2" stroke-width="1"/>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- LAYER 1: 可适配的 AI Agent (y: 20–120) -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <rect x="30" y="18" width="860" height="110" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#af0)"/>
+        <text x="52" y="40" font-size="12" font-weight="800" fill="#475569" letter-spacing="0.03em">🔌 可适配的 AI Agent</text>
+
+        <!-- Agent 1: xiaoO (openEuler) -->
+        <rect x="50" y="54" width="185" height="56" rx="9" fill="url(#agrad-agent)" stroke="#cbd5e1" stroke-width="1.2" filter="url(#af0)"/>
+        <rect x="56" y="60" width="32" height="32" rx="7" fill="#002fa7"/>
+        <text x="72" y="82" text-anchor="middle" font-size="15" fill="#fff" font-weight="800">O</text>
+        <text x="98" y="76" font-size="11.5" font-weight="700" fill="#1e293b">xiaoO</text>
+        <text x="98" y="92" font-size="9" fill="#94a3b8">openEuler</text>
+        <a href="https://atomgit.com/openeuler/xiaoO" target="_blank" rel="noopener">
+          <rect x="190" y="60" width="14" height="14" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8" opacity="0.7"/>
+          <text x="197" y="71" text-anchor="middle" font-size="8" fill="#94a3b8">↗</text>
+        </a>
+
+        <!-- Agent 2: OpenClaw -->
+        <rect x="260" y="54" width="185" height="56" rx="9" fill="url(#agrad-agent)" stroke="#cbd5e1" stroke-width="1.2" filter="url(#af0)"/>
+        <rect x="266" y="60" width="32" height="32" rx="7" fill="url(#agrad-adapter)" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="282" y="82" text-anchor="middle" font-size="14">🦞</text>
+        <text x="308" y="76" font-size="11.5" font-weight="700" fill="#1e293b">OpenClaw</text>
+        <text x="308" y="92" font-size="9" fill="#94a3b8">openclaw.ai</text>
+        <a href="https://openclaw.ai/" target="_blank" rel="noopener">
+          <rect x="400" y="60" width="14" height="14" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8" opacity="0.7"/>
+          <text x="407" y="71" text-anchor="middle" font-size="8" fill="#94a3b8">↗</text>
+        </a>
+
+        <!-- Agent 3: JiuwenClaw -->
+        <rect x="470" y="54" width="185" height="56" rx="9" fill="url(#agrad-agent)" stroke="#cbd5e1" stroke-width="1.2" filter="url(#af0)"/>
+        <rect x="476" y="60" width="32" height="32" rx="7" fill="#1e293b" stroke="#475569" stroke-width="0.8"/>
+        <text x="492" y="82" text-anchor="middle" font-size="14" fill="#fbbf24">⚡</text>
+        <text x="518" y="76" font-size="11.5" font-weight="700" fill="#1e293b">JiuwenClaw</text>
+        <text x="518" y="92" font-size="9" fill="#94a3b8">openjiuwen.com</text>
+        <a href="https://openjiuwen.com/en/jiuwenclaw" target="_blank" rel="noopener">
+          <rect x="610" y="60" width="14" height="14" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8" opacity="0.7"/>
+          <text x="617" y="71" text-anchor="middle" font-size="8" fill="#94a3b8">↗</text>
+        </a>
+
+        <!-- Agent 4: Hermes Agent -->
+        <rect x="680" y="54" width="190" height="56" rx="9" fill="url(#agrad-agent)" stroke="#cbd5e1" stroke-width="1.2" filter="url(#af0)"/>
+        <rect x="686" y="60" width="32" height="32" rx="7" fill="#7c3aed"/>
+        <text x="702" y="82" text-anchor="middle" font-size="14" fill="#fff">🏛</text>
+        <text x="728" y="76" font-size="11.5" font-weight="700" fill="#1e293b">Hermes Agent</text>
+        <text x="728" y="92" font-size="9" fill="#94a3b8">nousresearch.com</text>
+        <a href="https://hermes-agent.nousresearch.com/" target="_blank" rel="noopener">
+          <rect x="820" y="60" width="14" height="14" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8" opacity="0.7"/>
+          <text x="827" y="71" text-anchor="middle" font-size="8" fill="#94a3b8">↗</text>
+        </a>
+
+        <!-- Down arrows from 4 agents converging to adapter -->
+        <path d="M 142 110 L 142 135 L 410 135 L 410 158" stroke="#6366f1" stroke-width="1.3" fill="none" marker-end="url(#adn)" opacity="0.5"/>
+        <path d="M 352 110 L 352 148 L 410 148 L 410 158" stroke="#6366f1" stroke-width="1.3" fill="none" marker-end="url(#adn)" opacity="0.5"/>
+        <path d="M 562 110 L 562 148 L 510 148 L 510 158" stroke="#6366f1" stroke-width="1.3" fill="none" marker-end="url(#adn)" opacity="0.5"/>
+        <path d="M 775 110 L 775 135 L 510 135 L 510 158" stroke="#6366f1" stroke-width="1.3" fill="none" marker-end="url(#adn)" opacity="0.5"/>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- LAYER 2: 适配层 (y: 160–230) -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <rect x="80" y="160" width="760" height="72" rx="11" fill="url(#agrad-adapter)" stroke="#bfdbfe" stroke-width="2" filter="url(#af1)"/>
+        <text x="106" y="188" font-size="13" font-weight="800" fill="#1d4ed8">🔗 适配层 (Adapter Layer)</text>
+        <text x="106" y="208" font-size="10.5" fill="#3b82f6">统一事件格式 · 协议转换 · Hook 注册 · 多 Agent 运行时接入</text>
+        <!-- Sub-capsules -->
+        <rect x="510" y="174" width="120" height="22" rx="5" fill="#fff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="570" y="189" text-anchor="middle" font-size="10" fill="#1d4ed8" font-weight="600">Hook 注册</text>
+        <rect x="640" y="174" width="110" height="22" rx="5" fill="#fff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="695" y="189" text-anchor="middle" font-size="10" fill="#1d4ed8" font-weight="600">事件标准化</text>
+        <rect x="760" y="174" width="65" height="22" rx="5" fill="#fff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="792" y="189" text-anchor="middle" font-size="10" fill="#1d4ed8" font-weight="600">插件 SD</text>
+
+        <!-- Arrow Layer 2 → Layer 3 -->
+        <line x1="460" y1="232" x2="460" y2="268" stroke="#8b5cf6" stroke-width="2" marker-end="url(#adn)"/>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- LAYER 3: Agent 行为中间表示层 (y: 270–380) -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <rect x="80" y="270" width="760" height="112" rx="11" fill="url(#agrad-ir)" stroke="#c4b5fd" stroke-width="2" filter="url(#af1)"/>
+        <text x="106" y="296" font-size="13" font-weight="800" fill="#6d28d9">📊 Agent 行为中间表示层 (Intermediate Representation Layer)</text>
+        <text x="106" y="314" font-size="10.5" fill="#7c3aed">将异构 Agent 行为统一建模为结构化中间表示，支持跨 Agent 关联分析</text>
+
+        <!-- Sub-box: 状态迁移图 -->
+        <rect x="106" y="328" width="220" height="44" rx="8" fill="#fff" stroke="#ddd6fe" stroke-width="1.2"/>
+        <text x="216" y="348" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">🔄 状态迁移图</text>
+        <text x="216" y="364" text-anchor="middle" font-size="9.5" fill="#8b5cf6">State Transition Graph</text>
+
+        <!-- Sub-box: PDG 图 -->
+        <rect x="350" y="328" width="220" height="44" rx="8" fill="#fff" stroke="#ddd6fe" stroke-width="1.2"/>
+        <text x="460" y="348" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">📈 PDG 图</text>
+        <text x="460" y="364" text-anchor="middle" font-size="9.5" fill="#8b5cf6">Program Dependence Graph</text>
+
+        <!-- Sub-box: 调用拓扑 -->
+        <rect x="594" y="328" width="220" height="44" rx="8" fill="#fff" stroke="#ddd6fe" stroke-width="1.2"/>
+        <text x="704" y="348" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">🔗 调用拓扑</text>
+        <text x="704" y="364" text-anchor="middle" font-size="9.5" fill="#8b5cf6">Call Topology & Trace</text>
+
+        <!-- Arrow Layer 3 → Layer 4 -->
+        <line x1="460" y1="382" x2="460" y2="418" stroke="#f97316" stroke-width="2" marker-end="url(#adn)"/>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- LAYER 4: 多层行为分析引擎 (y: 420–510) -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <rect x="80" y="420" width="760" height="92" rx="11" fill="url(#agrad-analysis)" stroke="#fdba74" stroke-width="2" filter="url(#af1)"/>
+        <text x="106" y="446" font-size="13" font-weight="800" fill="#c2410c">🔍 多层行为分析引擎</text>
+        <text x="106" y="464" font-size="10.5" fill="#ea580c">基于中间表示的深度行为分析，多维度检测 Agent 安全威胁</text>
+
+        <!-- Analysis modules -->
+        <rect x="106" y="474" width="158" height="28" rx="6" fill="#fff" stroke="#fed7aa" stroke-width="1"/>
+        <text x="185" y="492" text-anchor="middle" font-size="11" font-weight="700" fill="#c2410c">🛡️ 注入检测</text>
+        <rect x="280" y="474" width="158" height="28" rx="6" fill="#fff" stroke="#fed7aa" stroke-width="1"/>
+        <text x="359" y="492" text-anchor="middle" font-size="11" font-weight="700" fill="#c2410c">💻 命令审查</text>
+        <rect x="454" y="474" width="158" height="28" rx="6" fill="#fff" stroke="#fed7aa" stroke-width="1"/>
+        <text x="533" y="492" text-anchor="middle" font-size="11" font-weight="700" fill="#c2410c">📂 路径扫描</text>
+        <rect x="628" y="474" width="158" height="28" rx="6" fill="#fff" stroke="#fed7aa" stroke-width="1"/>
+        <text x="707" y="492" text-anchor="middle" font-size="11" font-weight="700" fill="#c2410c">🔑 密钥匹配</text>
+
+        <!-- Arrow Layer 4 → Layer 5 -->
+        <line x1="460" y1="512" x2="460" y2="548" stroke="#10b981" stroke-width="2" marker-end="url(#adn)"/>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- LAYER 5: 多层威胁防护 (y: 550–630) -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <rect x="80" y="550" width="760" height="82" rx="11" fill="url(#agrad-defense)" stroke="#6ee7b7" stroke-width="2" filter="url(#af1)"/>
+        <text x="106" y="576" font-size="13" font-weight="800" fill="#059669">🛡️ 多层 Agent 威胁防护</text>
+        <text x="106" y="596" font-size="10.5" fill="#10b981">实时阻断 · 风险告警 · 审计追溯 · 策略联动</text>
+
+        <!-- Defense verdicts -->
+        <rect x="350" y="564" width="120" height="36" rx="8" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1.5"/>
+        <text x="410" y="579" text-anchor="middle" font-size="18">✅</text>
+        <text x="410" y="595" text-anchor="middle" font-size="10.5" font-weight="800" fill="#059669">allow</text>
+
+        <rect x="500" y="564" width="120" height="36" rx="8" fill="#fef3c7" stroke="#fcd34d" stroke-width="1.5"/>
+        <text x="560" y="579" text-anchor="middle" font-size="18">⚠️</text>
+        <text x="560" y="595" text-anchor="middle" font-size="10.5" font-weight="800" fill="#d97706">require_approval</text>
+
+        <rect x="650" y="564" width="120" height="36" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+        <text x="710" y="579" text-anchor="middle" font-size="18">🚫</text>
+        <text x="710" y="595" text-anchor="middle" font-size="10.5" font-weight="800" fill="#dc2626">block</text>
+
+        <!-- Vertical layer labels on the left -->
+        <text x="30" y="196" font-size="8.5" fill="#94a3b8" font-weight="600" transform="rotate(-90 30 196)">数据流入</text>
+        <text x="30" y="328" font-size="8.5" fill="#94a3b8" font-weight="600" transform="rotate(-90 30 328)">中间表示</text>
+        <text x="30" y="466" font-size="8.5" fill="#94a3b8" font-weight="600" transform="rotate(-90 30 466)">行为分析</text>
+        <text x="30" y="592" font-size="8.5" fill="#94a3b8" font-weight="600" transform="rotate(-90 30 592)">威胁防护</text>
+      </svg>
+    </div>
+  </div>
+
   <!-- 架构图 -->
   <div class="section">
     <div class="section-title">🏗️ 敏感数据流向监控</div>
@@ -472,10 +639,8 @@
     <p style="color:var(--text-muted);font-size:12px;margin-top:12px;line-height:1.7;">💡 注册后 OpenClaw 会在 <strong>before_tool_call</strong> 钩子将工具调用参数发送给 AgentMoss 安全引擎；引擎依据安全规则库执行注入检测、密钥匹配、路径扫描等策略，返回 <code>allow</code> / <code>block</code> / <code>require_approval</code> 三级裁决；高风险操作被实时阻断并触发告警。</p>
   </div>
 
-  <!-- 规则库 -->
-
-  <footer class="paper-footer" aria-label="计划发表的论文">
-    <strong>计划发表的论文：</strong>
+  <footer class="paper-footer" aria-label="论文">
+    <strong>论文预览：AgentVerify: Compositional Formal Verification of AI Agent Safety Properties via LTL Model Checking</strong>
     <a href="https://www.preprints.org/manuscript/202604.1029" target="_blank" rel="noopener">AgentMoss Preprint</a>
-    <span>我们计划发表的论文系统化介绍了 AgentMoss 的设计动机、运行时监控架构与 Agent 安全评估方法。</span>
+    <span>（论文介绍了MOSS的子技术，使用形式化方法抽象agent状态迁移系统，使用模型检测技术验证安全性质）</span>
   </footer>
