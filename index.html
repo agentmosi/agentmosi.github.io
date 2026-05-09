@@ -184,6 +184,141 @@
   .paper-footer a { color: var(--accent); font-weight: 700; text-decoration: none; }
   .paper-footer a:hover { text-decoration: underline; }
 
+
+  .dashboard-demo-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid var(--border-light);
+    border-radius: 24px;
+    padding: 18px;
+    box-shadow: 0 24px 70px rgba(15,23,42,0.10);
+    overflow: hidden;
+  }
+  .dashboard-demo-shell {
+    min-height: 620px;
+    display: grid;
+    grid-template-columns: 230px minmax(0,1fr);
+    gap: 16px;
+    padding: 16px;
+    border-radius: 20px;
+    background:
+      radial-gradient(circle at 82% 12%, rgba(139,92,246,0.16), transparent 28%),
+      radial-gradient(circle at 18% 88%, rgba(59,130,246,0.14), transparent 30%),
+      #eef4ff;
+  }
+  .demo-sidebar,
+  .demo-main-panel,
+  .demo-panel,
+  .demo-metric {
+    background: rgba(255,255,255,0.86);
+    border: 1px solid rgba(226,232,240,0.92);
+    box-shadow: 0 14px 38px rgba(30,41,59,0.07);
+  }
+  .demo-sidebar {
+    border-radius: 18px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .demo-brand { display: flex; gap: 10px; align-items: center; }
+  .demo-logo {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff; font-weight: 900; box-shadow: 0 10px 24px rgba(99,102,241,0.24);
+  }
+  .demo-brand strong { display:block; font-size:13px; line-height:1.2; }
+  .demo-brand span { display:block; color:var(--text-muted); font-size:11px; line-height:1.3; margin-top:2px; }
+  .demo-nav { display:grid; gap:9px; }
+  .demo-nav-item {
+    border: 1px solid #e8eef8;
+    border-radius: 13px;
+    padding: 10px;
+    display:flex; gap:9px; align-items:center;
+    background:#fff;
+  }
+  .demo-nav-item.active { background:#eef5ff; border-color:#bfdbfe; }
+  .demo-nav-icon {
+    width: 28px; height: 28px; border-radius: 9px;
+    display:grid; place-items:center;
+    background:#f1f5f9; color:#6366f1; font-size:13px; flex:0 0 auto;
+  }
+  .demo-nav-item b { display:block; font-size:12px; line-height:1.2; }
+  .demo-nav-item small { color:var(--text-muted); font-size:10px; }
+  .demo-runs { margin-top:auto; border-top:1px solid #edf1f7; padding-top:14px; }
+  .demo-runs-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .demo-runs-head small { color:#2563eb; font-size:10px; font-weight:800; letter-spacing:.06em; }
+  .demo-refresh { border:1px solid #dbe4f0; border-radius:999px; padding:4px 8px; font-size:10px; color:#475569; }
+  .demo-run { border-radius:12px; padding:10px; background:#f8fafc; font-size:11px; color:#64748b; }
+  .demo-run strong { display:block; color:#0f172a; margin-bottom:3px; font-size:12px; }
+  .demo-main { display:grid; gap:14px; align-content:start; }
+  .demo-hero-panel {
+    min-height: 132px;
+    border-radius: 20px;
+    padding: 22px;
+    display:flex; justify-content:space-between; align-items:center; gap:20px;
+    background:
+      radial-gradient(circle at 92% 40%, rgba(99,102,241,0.16), transparent 26%),
+      linear-gradient(135deg, #fff 0%, #f6f1ff 100%);
+    border:1px solid rgba(226,232,240,.9);
+  }
+  .demo-kicker { color:#2563eb; font-size:11px; font-weight:800; letter-spacing:.08em; margin-bottom:8px; }
+  .demo-hero-panel h3 { font-size:24px; line-height:1.15; letter-spacing:-.03em; margin:0; }
+  .demo-status { display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border-radius:999px; background:#ecfdf5; color:#047857; font-size:12px; font-weight:800; border:1px solid #a7f3d0; white-space:nowrap; }
+  .demo-status::before { content:""; width:8px; height:8px; border-radius:99px; background:#10b981; box-shadow:0 0 0 4px rgba(16,185,129,.14); }
+  .demo-orbit {
+    width:96px; height:96px; flex:0 0 auto; border-radius:28px;
+    display:grid; place-items:center; color:#fff; font-size:34px;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    position:relative; box-shadow:0 20px 45px rgba(99,102,241,.24);
+  }
+  .demo-orbit::before, .demo-orbit::after { content:""; position:absolute; inset:-10px; border:1px solid rgba(99,102,241,.28); border-radius:50%; transform:rotate(22deg) scaleX(1.24); }
+  .demo-orbit::after { inset:-18px; opacity:.45; transform:rotate(-22deg) scaleX(1.36); }
+  .demo-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .demo-metric { border-radius:16px; padding:14px; position:relative; overflow:hidden; }
+  .demo-metric:nth-child(2){ background:#fffdf4; }
+  .demo-metric:nth-child(3){ background:#fff7f7; }
+  .demo-metric:nth-child(4){ background:#f6fffb; }
+  .demo-metric::after { content:""; position:absolute; width:58px; height:58px; border-radius:50%; right:-20px; top:-18px; background:rgba(99,102,241,.08); }
+  .demo-metric span { color:#64748b; font-size:11px; font-weight:700; }
+  .demo-metric strong { display:block; font-size:28px; line-height:1.1; margin:6px 0; }
+  .demo-metric small { color:#94a3b8; font-size:10px; }
+  .demo-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:14px; }
+  .demo-panel { min-height:235px; border-radius:18px; overflow:hidden; }
+  .demo-panel-head { padding:15px 16px; border-bottom:1px solid #edf1f7; display:flex; justify-content:space-between; gap:12px; align-items:center; }
+  .demo-panel-head small { display:block; color:#2563eb; font-size:10px; font-weight:800; letter-spacing:.08em; margin-bottom:3px; }
+  .demo-panel-head b { font-size:16px; }
+  .demo-pill { padding:5px 9px; border-radius:999px; border:1px solid #e2e8f0; background:#f8fafc; font-size:11px; color:#64748b; white-space:nowrap; }
+  .demo-events { padding:12px; display:grid; gap:10px; }
+  .demo-event {
+    border:1px solid #e8eef8; border-radius:14px; background:#fff; padding:11px;
+    box-shadow:0 8px 20px rgba(15,23,42,.04);
+  }
+  .demo-event-row { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; }
+  .demo-event-name { font-size:13px; font-weight:800; color:#0f172a; }
+  .demo-badges { display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end; }
+  .demo-badge { border-radius:999px; padding:3px 7px; font-size:10px; font-weight:800; background:#f1f5f9; color:#475569; }
+  .demo-badge.warn { background:#fff7ed; color:#c2410c; }
+  .demo-badge.block { background:#fef2f2; color:#dc2626; }
+  .demo-badge.observe { background:#f1f5f9; color:#64748b; }
+  .demo-event p { color:#64748b; font-size:11px; line-height:1.55; }
+  .demo-sensitive-flow { margin:12px; padding:12px; border-radius:16px; border:1px solid #fed7aa; background:linear-gradient(135deg,#fff7ed,#fff); }
+  .demo-flow-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:12px; font-weight:800; color:#9a3412; }
+  .demo-flow-line { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; }
+  .demo-flow-node { border-radius:12px; background:#fff; border:1px solid #ffedd5; padding:9px; text-align:center; }
+  .demo-flow-node strong { display:block; font-size:11px; color:#0f172a; }
+  .demo-flow-node small { color:#c2410c; font-size:9px; }
+  .demo-arrow { color:#f97316; font-weight:900; }
+  .demo-json { padding:14px; font-family:"SF Mono", Menlo, monospace; font-size:11px; color:#cbd5e1; background:#0f172a; min-height:171px; white-space:pre-wrap; line-height:1.65; }
+  .demo-json .j-key { color:#93c5fd; }
+  .demo-json .j-str { color:#a5b4fc; }
+  @media (max-width: 900px) {
+    .dashboard-demo-shell { grid-template-columns:1fr; }
+    .demo-sidebar { display:none; }
+    .demo-metrics, .demo-grid { grid-template-columns:1fr; }
+    .demo-hero-panel { align-items:flex-start; flex-direction:column; }
+  }
+
   @media (max-width: 768px) {
     .features { grid-template-columns: 1fr; }
     .spec-list { grid-template-columns: 1fr; }
@@ -577,6 +712,74 @@
       </svg>
     </div>
   </div>
+
+
+  <!-- 实时仪表盘演示 -->
+  <div class="section" id="dashboard-demo">
+    <div class="section-title">🖥️ 实时安全仪表盘演示</div>
+    <div class="dashboard-demo-card" aria-label="AgentMoss 实时安全仪表盘静态演示">
+      <div class="dashboard-demo-shell">
+        <aside class="demo-sidebar">
+          <div class="demo-brand">
+            <div class="demo-logo">✓</div>
+            <div><strong>X-AGENT 安全监控</strong><span>AgentMoss 实时安全仪表盘</span></div>
+          </div>
+          <div class="demo-nav">
+            <div class="demo-nav-item active"><span class="demo-nav-icon">⌁</span><div><b>全部行为</b><small>x-Agent 全链路事件</small></div></div>
+            <div class="demo-nav-item"><span class="demo-nav-icon">⚙</span><div><b>工具监控</b><small>工具调用、结果、阻断</small></div></div>
+            <div class="demo-nav-item"><span class="demo-nav-icon">◉</span><div><b>行为监控</b><small>模型输入、输出、消息</small></div></div>
+            <div class="demo-nav-item"><span class="demo-nav-icon">⛨</span><div><b>风险事件</b><small>高危、需审批、已阻拦</small></div></div>
+          </div>
+          <div class="demo-runs">
+            <div class="demo-runs-head"><div><small>运行会话</small><strong style="display:block;font-size:16px;">近期运行</strong></div><span class="demo-refresh">刷新</span></div>
+            <div class="demo-run"><strong>检查 .env 并总结密钥风险</strong>3 条事件 · ID 已隐藏 3f6a5fce…</div>
+          </div>
+        </aside>
+        <main class="demo-main">
+          <section class="demo-hero-panel">
+            <div>
+              <div class="demo-kicker">运行时旁路安全防线</div>
+              <h3>Agent行为全链路监控与安全分析</h3>
+            </div>
+            <div style="display:flex;align-items:center;gap:18px;"><span class="demo-status">实时连接</span><div class="demo-orbit">⛨</div></div>
+          </section>
+          <section class="demo-metrics" aria-label="监控指标">
+            <div class="demo-metric"><span>总事件</span><strong>128</strong><small>实时采集的行为数量</small></div>
+            <div class="demo-metric"><span>风险事件</span><strong>9</strong><small>包含规则命中或风险等级</small></div>
+            <div class="demo-metric"><span>已阻拦</span><strong>3</strong><small>工具调用前阻断</small></div>
+            <div class="demo-metric"><span>活跃运行</span><strong>6</strong><small>x-Agent 活跃会话</small></div>
+          </section>
+          <section class="demo-grid">
+            <div class="demo-panel">
+              <div class="demo-panel-head"><div><small>实时行为流</small><b>x-Agent 行为</b></div><span class="demo-pill">3 条事件</span></div>
+              <div class="demo-events">
+                <article class="demo-event"><div class="demo-event-row"><span class="demo-event-name">模型输入</span><span class="demo-badges"><span class="demo-badge">低风险</span><span class="demo-badge observe">已观察</span></span></div><p>内容：请检查项目配置并确认是否存在敏感凭据。</p></article>
+                <article class="demo-event"><div class="demo-event-row"><span class="demo-event-name">工具调用前检查</span><span class="demo-badges"><span class="demo-badge warn">中风险</span><span class="demo-badge observe">已观察</span></span></div><p>指令：cat .env ｜ 命中规则：敏感路径读取</p></article>
+                <article class="demo-event"><div class="demo-event-row"><span class="demo-event-name">已阻拦工具调用</span><span class="demo-badges"><span class="demo-badge block">已阻拦</span><span class="demo-badge observe">已观察</span></span></div><p>阻拦原因：检测到 API Key / token 读取风险。</p></article>
+              </div>
+              <div class="demo-sensitive-flow">
+                <div class="demo-flow-title"><span>敏感数据流向</span><span>1 条流向</span></div>
+                <div class="demo-flow-line"><div class="demo-flow-node"><strong>敏感数据源</strong><small>.env / API Key</small></div><div class="demo-arrow">→</div><div class="demo-flow-node"><strong>x-Agent 上下文</strong><small>敏感读取</small></div></div>
+              </div>
+            </div>
+            <div class="demo-panel">
+              <div class="demo-panel-head"><div><small>取证详情</small><b>事件详情</b></div><span class="demo-pill">JSON</span></div>
+              <div class="demo-json">{
+  <span class="j-key">"hookName"</span>: <span class="j-str">"before_tool_call"</span>,
+  <span class="j-key">"tool"</span>: <span class="j-str">"bash"</span>,
+  <span class="j-key">"risk"</span>: {
+    <span class="j-key">"ruleId"</span>: <span class="j-str">"sensitive_path_read"</span>,
+    <span class="j-key">"decision"</span>: <span class="j-str">"block"</span>
+  },
+  <span class="j-key">"evidence"</span>: <span class="j-str">"prompt → tool_call → policy_decision"</span>
+}</div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </div>
+
 
   <!-- 核心能力 -->
   <div class="section">
