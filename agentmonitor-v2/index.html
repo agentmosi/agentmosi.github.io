@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN" data-page="agentmonitor-v2-index">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentMonitor 架构与能力概览 - AgentMoss</title>
+  <style>
+    :root{color-scheme:light;--bg:#f5f7fb;--ink:#111827;--muted:#667085;--brand:#3451db;--brand2:#7c3aed;--line:#dbe4f0;--surface:#fff;--danger:#d92d20;--good:#0f9f6e;--warn:#b7791f}*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 8%,rgba(52,81,219,.18),transparent 28rem),radial-gradient(circle at 85% 10%,rgba(124,58,237,.14),transparent 26rem),linear-gradient(180deg,#fbfcff,#eef3fb)}a{color:inherit}.page{max-width:1180px;margin:0 auto;padding:28px}.nav{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:38px}.brand{display:flex;align-items:center;gap:12px;font-weight:800}.mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:white;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 16px 40px rgba(52,81,219,.24)}.navlinks{display:flex;gap:10px;flex-wrap:wrap}.navlinks a,.btn{padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.74);text-decoration:none;font-weight:700}.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;border:0}.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}.eyebrow{color:var(--brand);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:12px}.hero h1{font-size:56px;line-height:1.02;margin:12px 0}.lead{font-size:19px;line-height:1.75;color:var(--muted)}.card,.panel{background:rgba(255,255,255,.88);border:1px solid rgba(219,228,240,.9);border-radius:28px;box-shadow:0 24px 80px rgba(35,56,118,.12);backdrop-filter:blur(16px)}.hero-card{padding:24px}.flow{display:grid;gap:12px}.node{padding:16px;border-radius:18px;border:1px solid var(--line);background:#fff}.node strong{display:block}.arrow{text-align:center;color:var(--brand);font-weight:900}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}.card{padding:22px}.card h3{margin:0 0 10px;font-size:20px}.card p{color:var(--muted);line-height:1.65}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;background:#eef2ff;color:#1e2f97;font-weight:800;font-size:12px}.section{margin-top:34px}.section h2{font-size:34px;margin:0 0 14px}.table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:20px;background:white}.table th,.table td{text-align:left;padding:14px;border-bottom:1px solid var(--line);vertical-align:top}.table th{background:#f8faff}.danger{color:var(--danger);font-weight:800}.good{color:var(--good);font-weight:800}.warn{color:var(--warn);font-weight:800}code{background:#f2f4f7;border:1px solid #e4e7ec;border-radius:8px;padding:2px 6px}.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}@media(max-width:880px){.hero,.grid{grid-template-columns:1fr}.hero h1{font-size:38px}.page{padding:18px}.nav{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav">
+      <div class="brand"><span class="mark">⛨</span><span>AgentMoss / AgentMonitor</span></div>
+      <div class="navlinks"><a href="/">实时仪表盘</a><a href="/index.html">概览</a><a href="/doc.html">文档</a></div>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Out-of-band Agent Security</p>
+        <h1>AgentMonitor 架构与能力概览</h1>
+        <p class="lead">AgentMonitor 是面向 OpenClaw / x-Agent 的旁路安全监控平面：在不改造 Agent 主运行时的前提下，通过插件 hook 捕获模型输入输出、工具调用、消息发送、子 Agent 生成和安装行为，并在关键路径执行实时阻断、审批与审计。</p>
+        <div class="cta"><a class="btn primary" href="/doc.html">查看配置与防御指南</a><a class="btn" href="/">打开实时仪表盘</a></div>
+      </div>
+      <div class="hero-card card">
+        <div class="flow">
+          <div class="node"><strong>OpenClaw / x-Agent</strong><span>LLM、工具、消息、Subagent、安装流程</span></div>
+          <div class="arrow">↓ hooks</div>
+          <div class="node"><strong>agentmonitor-demo/openclaw-plugin</strong><span><code>before_tool_call</code>、<code>message_sending</code>、<code>before_install</code></span></div>
+          <div class="arrow">↓ HTTP policy checks</div>
+          <div class="node"><strong>AgentMonitor 服务</strong><span><code>POST /api/tool-call/check</code> 与 <code>POST /api/hook/check</code></span></div>
+          <div class="arrow">↓ realtime evidence</div>
+          <div class="node"><strong>AgentMoss UI</strong><span>行为流、风险事件、敏感数据流向、取证详情</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="主要特性">
+      <article class="card"><span class="pill">实时阻断</span><h3>工具调用前安全检查</h3><p>在 <code>before_tool_call</code> 阶段检测 <code>rm -rf /</code>、私钥访问、下载脚本执行等高危行为，返回 block 或 requireApproval。</p></article>
+      <article class="card"><span class="pill">数据泄漏</span><h3>消息与会话防泄漏</h3><p>在 <code>message_sending</code> 与 <code>before_message_write</code> 阶段拦截疑似 API key、token、private key 等凭证内容。</p></article>
+      <article class="card"><span class="pill">供应链</span><h3>安装与子 Agent 防护</h3><p>通过 <code>before_install</code> 和 <code>subagent_spawning</code> 防御恶意插件、skill 安装与子 Agent 凭证外传任务。</p></article>
+      <article class="card"><span class="pill">可观测性</span><h3>全链路行为流</h3><p>采集 LLM 输入输出、工具结果和策略决策，形成可检索事件、证据链和风险卡片。</p></article>
+      <article class="card"><span class="pill">轻量集成</span><h3>独立插件入口</h3><p>OpenClaw 只需配置 <code>plugins.load.paths</code> 指向 <code>agentmonitor-demo/openclaw-plugin</code>，无需修改 OpenClaw 源码。</p></article>
+      <article class="card"><span class="pill">本地优先</span><h3>低延迟策略引擎</h3><p>同步检查走本地规则引擎，不依赖远程 LLM，适合 80ms 级别的实时决策路径。</p></article>
+    </section>
+
+    <section class="section panel" style="padding:24px">
+      <h2>当前防护面</h2>
+      <table class="table">
+        <thead><tr><th>威胁</th><th>Hook</th><th>动作</th></tr></thead>
+        <tbody>
+          <tr><td>破坏性工具调用</td><td><code>before_tool_call</code></td><td class="danger">阻断 / 审批</td></tr>
+          <tr><td>数据泄漏、凭证窃取</td><td><code>message_sending</code>、<code>before_message_write</code></td><td class="danger">取消发送 / 阻断持久化</td></tr>
+          <tr><td>子 Agent 越权</td><td><code>subagent_spawning</code></td><td class="warn">拒绝任务</td></tr>
+          <tr><td>供应链风险</td><td><code>before_install</code></td><td class="danger">阻断安装</td></tr>
+          <tr><td>行为取证</td><td><code>llm_input</code>、<code>llm_output</code>、<code>after_tool_call</code></td><td class="good">观察记录</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
