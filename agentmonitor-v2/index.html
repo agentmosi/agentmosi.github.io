@@ -41,7 +41,8 @@
       <article class="card"><span class="pill">供应链</span><h3>安装与子 Agent 防护</h3><p>通过 <code>before_install</code> 和 <code>subagent_spawning</code> 防御恶意插件、skill 安装与子 Agent 凭证外传任务。</p></article>
       <article class="card"><span class="pill">可观测性</span><h3>全链路行为流</h3><p>采集 LLM 输入输出、工具结果和策略决策，形成可检索事件、证据链和风险卡片。</p></article>
       <article class="card"><span class="pill">轻量集成</span><h3>独立插件入口</h3><p>OpenClaw 只需配置 <code>plugins.load.paths</code> 指向 <code>agentmonitor-demo/openclaw-plugin</code>，无需修改 OpenClaw 源码。</p></article>
-      <article class="card"><span class="pill">本地优先</span><h3>低延迟策略引擎</h3><p>同步检查走本地规则引擎，不依赖远程 LLM，适合 80ms 级别的实时决策路径。</p></article>
+       <article class="card"><span class="pill">本地优先</span><h3>低延迟策略引擎</h3><p>同步检查走本地规则引擎，不依赖远程 LLM，适合 80ms 级别的实时决策路径。</p></article>
+       <article class="card"><span class="pill">全局关联</span><h3>跨会话攻击链发现</h3><p>Recorder 持久化全量行为，再由 <code>/api/global/findings</code> 关联多会话中的侦察、读取、打包和外发阶段，发现单点 hook 看不到的攻击链。</p></article>
     </section>
 
     <section class="section panel" style="padding:24px">
@@ -53,7 +54,8 @@
           <tr><td>数据泄漏、凭证窃取</td><td><code>message_sending</code>、<code>before_message_write</code></td><td class="danger">取消发送 / 阻断持久化</td></tr>
           <tr><td>子 Agent 越权</td><td><code>subagent_spawning</code></td><td class="warn">拒绝任务</td></tr>
           <tr><td>供应链风险</td><td><code>before_install</code></td><td class="danger">阻断安装</td></tr>
-          <tr><td>行为取证</td><td><code>llm_input</code>、<code>llm_output</code>、<code>after_tool_call</code></td><td class="good">观察记录</td></tr>
+           <tr><td>行为取证</td><td><code>llm_input</code>、<code>llm_output</code>、<code>after_tool_call</code></td><td class="good">观察记录</td></tr>
+           <tr><td>跨会话多阶段攻击链</td><td><code>/api/global/findings</code>、SQLite/JSONL Recorder</td><td class="danger">全局关联告警</td></tr>
         </tbody>
       </table>
     </section>
