@@ -19,8 +19,9 @@
 
     <section id="quickstart" class="section">
       <h2>1. 快速启动</h2>
-      <p>AgentMonitor Demo 服务位于 <code>agentmonitor-demo</code>，默认监听 <code>http://127.0.0.1:19876</code>。</p>
-      <pre>cd /Users/ericbinder/Documents/SafeAgent/AgentMonitor/agentmonitor-demo
+      <p>AgentMonitor Demo 服务位于 <code>agentmonitor-demo</code>。用户先从 GitHub 拉取仓库，再进入 demo 目录安装依赖并启动服务；默认监听 <code>http://127.0.0.1:19876</code>。</p>
+      <pre>git clone git@github.com:agentmosi/agentmonitor.git
+cd agentmonitor/agentmonitor-demo
 env -u NODE_OPTIONS pnpm install
 env -u NODE_OPTIONS pnpm dev
 
@@ -37,7 +38,7 @@ curl http://127.0.0.1:19876/api/health</pre>
     "enabled": true,
     "load": {
       "paths": [
-        "/Users/ericbinder/Documents/SafeAgent/AgentMonitor/agentmonitor-demo/openclaw-plugin"
+        "${AGENTMONITOR_REPO}/agentmonitor-demo/openclaw-plugin"
       ]
     },
     "entries": {
@@ -60,9 +61,13 @@ curl http://127.0.0.1:19876/api/health</pre>
     }
   }
 }</pre>
-      <pre>cd /Users/ericbinder/Documents/SafeAgent/AgentMonitor/openclaw
-env -u NODE_OPTIONS PATH="/opt/homebrew/opt/node/bin:/opt/homebrew/bin:$PATH" pnpm openclaw config validate
-env -u NODE_OPTIONS PATH="/opt/homebrew/opt/node/bin:/opt/homebrew/bin:$PATH" OPENCLAW_BONJOUR_ENABLED=0 pnpm openclaw gateway --port 18790 --force</pre>
+      <p>将 <code>AGENTMONITOR_REPO</code> 指向你刚刚 clone 下来的仓库根目录，然后验证配置并启动 OpenClaw gateway。</p>
+      <pre>export AGENTMONITOR_REPO="$PWD/agentmonitor"
+# 如果当前已经在仓库根目录，可使用：export AGENTMONITOR_REPO="$PWD"
+
+cd /path/to/openclaw
+env -u NODE_OPTIONS pnpm openclaw config validate
+env -u NODE_OPTIONS OPENCLAW_BONJOUR_ENABLED=0 pnpm openclaw gateway --port 18790 --force</pre>
     </section>
 
     <section id="defense" class="section">
@@ -111,19 +116,19 @@ env -u NODE_OPTIONS PATH="/opt/homebrew/opt/node/bin:/opt/homebrew/bin:$PATH" OP
     <section id="api" class="section">
       <h2>5. API 与验证</h2>
       <h3>工具调用检查</h3>
-      <pre>curl -s http://127.0.0.1:19876/api/tool-call/check \
-  -H 'content-type: application/json' \
+      <pre>curl -s http://127.0.0.1:19876/api/tool-call/check \\
+  -H 'content-type: application/json' \\
   -d '{"toolName":"shell","params":{"command":"rm -rf /"},"runId":"demo"}'</pre>
       <h3>通用干预 Hook 检查</h3>
-      <pre>curl -s http://127.0.0.1:19876/api/hook/check \
-  -H 'content-type: application/json' \
+      <pre>curl -s http://127.0.0.1:19876/api/hook/check \\
+  -H 'content-type: application/json' \\
   -d '{"hookName":"message_sending","event":{"content":"API_KEY=sk-test-secret-value"},"runId":"demo"}'</pre>
       <h3>事件查询</h3>
       <pre>curl http://127.0.0.1:19876/api/events
 curl http://127.0.0.1:19876/api/runs
 curl http://127.0.0.1:19876/api/events/stream</pre>
       <p>测试命令：</p>
-      <pre>cd /Users/ericbinder/Documents/SafeAgent/AgentMonitor/agentmonitor-demo
+      <pre>cd agentmonitor/agentmonitor-demo
 env -u NODE_OPTIONS pnpm test
 env -u NODE_OPTIONS pnpm typecheck</pre>
     </section>
