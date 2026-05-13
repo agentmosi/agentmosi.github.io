@@ -14,7 +14,7 @@
     <section class="hero">
       <h1>AgentMonitor 配置与防御指南</h1>
       <p class="lead">本页整合 <code>agentmonitor-demo/doc</code> 的架构、使用说明和威胁模型，说明如何配置 OpenClaw 插件、启动服务、验证 API，以及 AgentMonitor 具体防御哪些行为。</p>
-      <div class="toc"><a href="#quickstart">快速启动</a><a href="#openclaw">OpenClaw 插件配置</a><a href="#defense">防御内容与例子</a><a href="#global">全局关联分析</a><a href="#api">API 与验证</a></div>
+      <div class="toc"><a href="#quickstart">快速启动</a><a href="#openclaw">OpenClaw 插件配置</a><a href="#defense">防御内容与例子</a><a href="#global">全局关联分析</a><a href="#data-model">核心数据结构</a><a href="#api">API 与验证</a></div>
     </section>
 
     <section id="quickstart" class="section">
@@ -113,8 +113,91 @@ env -u NODE_OPTIONS OPENCLAW_BONJOUR_ENABLED=0 pnpm openclaw gateway --port 1879
 }</pre>
     </section>
 
+
+    <section id="data-model" class="section">
+      <h2>5. 核心数据结构：行为记录如何组织</h2>
+      <p>AgentMonitor 的行为记录采用 append-style 事件流模型。OpenClaw hook、工具调用检查、策略命中、消息发送与跨会话分析，最终都会归一化为一条 <code>AgentMonitorEvent</code>，写入统一的 <code>EventRecorder</code>。运行会话、证据链、行为图和全局攻击链都是从事件流派生出来的视图。</p>
+      <h3>AgentMonitorEvent</h3>
+      <pre>type AgentMonitorEvent = {
+  id: string;
+  timestamp: number;
+  runId?: string;
+  sessionKey?: string;
+  sessionId?: string;
+  agentId?: string;
+  toolCallId?: string;
+  hookName: string;
+  eventType: EventType;
+  sourceTrust: SourceTrust;
+  payload: unknown;
+  risk?: EventRisk;
+  parentEventIds: string[];
+};</pre>
+      <table class="table"><thead><tr><th>字段</th><th>作用</th></tr></thead><tbody>
+        <tr><td><code>runId</code></td><td>AgentMonitor 侧运行会话 ID，用于左侧运行列表和单 run 行为图。</td></tr>
+        <tr><td><code>sessionKey</code> / <code>agentId</code></td><td>OpenClaw/x-Agent 侧会话与 agent 维度，用于跨 run、跨会话关联。</td></tr>
+        <tr><td><code>hookName</code> / <code>eventType</code></td><td>记录事件来自哪个 hook，以及归一化后的事件类别，如 <code>llm_input</code>、<code>tool_call</code>、<code>message_sending</code>、<code>policy_decision</code>、<code>hook_check</code>。</td></tr>
+        <tr><td><code>sourceTrust</code></td><td>来源信任域：<code>system</code>、<code>llm</code>、<code>tool</code>、<code>user</code>、<code>external</code>。</td></tr>
+        <tr><td><code>payload</code></td><td>原始上下文、工具参数、模型消息、工具结果或策略输出。</td></tr>
+        <tr><td><code>risk</code></td><td>可选风险信息，包含 <code>severity</code>、<code>ruleId</code>、<code>reason</code> 和 <code>evidencePaths</code>。</td></tr>
+        <tr><td><code>parentEventIds</code></td><td>父事件 ID 列表，用于证据链回溯和行为图边关系。</td></tr>
+      </tbody></table>
+      <h3>EventRecorder 接口</h3>
+      <pre>interface EventRecorder {
+  addEvent(event: AgentMonitorEvent): AgentMonitorEvent;
+  getEvent(eventId: string): AgentMonitorEvent | undefined;
+  listEvents(filter?: { runId?: string }): AgentMonitorEvent[];
+  listRuns(): RunSummary[];
+}</pre>
+      <p>上层 API 只依赖 <code>EventRecorder</code>，因此内存、SQLite、JSONL 等存储实现可以互换。<code>listRuns()</code> 不依赖单独 run 表，而是按事件中的 <code>runId</code> 聚合出 <code>RunSummary</code>：包含显示名、事件数、首尾时间和隐藏 raw run id 的标记。</p>
+      <h3>持久化结构</h3>
+      <p>SQLite recorder 使用单表 <code>events</code> 存储事件主字段，复杂对象以 JSON 字符串保存：</p>
+      <pre>CREATE TABLE events (
+  id TEXT PRIMARY KEY,
+  timestamp INTEGER NOT NULL,
+  run_id TEXT,
+  session_key TEXT,
+  session_id TEXT,
+  agent_id TEXT,
+  tool_call_id TEXT,
+  hook_name TEXT NOT NULL,
+  event_type TEXT NOT NULL,
+  source_trust TEXT NOT NULL,
+  payload_json TEXT NOT NULL,
+  risk_json TEXT,
+  parent_event_ids_json TEXT NOT NULL
+);</pre>
+      <p>关键索引包括时间索引、run 索引，以及 <code>session_key + agent_id</code> 索引，分别服务事件流展示、单会话检索和跨会话关联。Node 环境无法加载 <code>node:sqlite</code> 时会自动降级为 JSONL recorder，每行保存一条完整 <code>AgentMonitorEvent</code>。</p>
+      <h3>派生视图</h3>
+      <ul>
+        <li><strong>运行列表</strong>：<code>GET /api/runs</code> 从事件流按 <code>runId</code> 聚合。</li>
+        <li><strong>事件流</strong>：<code>GET /api/events</code> 和 <code>GET /api/events/stream</code> 返回历史事件和 SSE 实时事件。</li>
+        <li><strong>行为图</strong>：<code>GET /api/runs/:runId/graph</code> 根据事件和 <code>parentEventIds</code> 构建节点与边。</li>
+        <li><strong>证据链</strong>：<code>GET /api/runs/:runId/evidence?eventId=...</code> 从目标事件向前回溯上下文。</li>
+        <li><strong>全局发现</strong>：<code>GET /api/global/findings</code> 跨 run 扫描 <code>recon → sensitive_read → staging → egress</code> 阶段，输出 <code>GlobalFinding</code>。</li>
+      </ul>
+      <pre>{
+  "id": "evt_demo_1",
+  "timestamp": 1710000000000,
+  "runId": "run-read",
+  "sessionKey": "agent:main:demo",
+  "agentId": "main",
+  "hookName": "after_tool_call",
+  "eventType": "tool_result",
+  "sourceTrust": "tool",
+  "payload": { "toolName": "exec", "command": "grep -R API_KEY ." },
+  "risk": {
+    "severity": "warning",
+    "ruleId": "dotenv-file-access",
+    "reason": "Sensitive dotenv/config access",
+    "evidencePaths": ["payload.command"]
+  },
+  "parentEventIds": []
+}</pre>
+    </section>
+
     <section id="api" class="section">
-      <h2>5. API 与验证</h2>
+      <h2>6. API 与验证</h2>
       <h3>工具调用检查</h3>
       <pre>curl -s http://127.0.0.1:19876/api/tool-call/check \\
   -H 'content-type: application/json' \\
